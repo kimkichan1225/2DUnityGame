@@ -27,6 +27,7 @@ public class ParallaxBackground : MonoBehaviour
     }
 
     void LateUpdate()
+
     {
         float clampedCameraX = Mathf.Clamp(cameraTransform.position.x, minX, maxX);
         Vector3 currentCameraPosition = new Vector3(clampedCameraX, cameraTransform.position.y, cameraTransform.position.z);

@@ -7,7 +7,7 @@ public class ParallaxBackground2 : MonoBehaviour
     [SerializeField] private bool infiniteScroll;
     [SerializeField] private float textureUnitSizeY;
     [SerializeField] private float minY;
-    [SerializeField] private float maxY;
+    public float maxY;
 
     private Vector3 lastCameraPosition;
 
