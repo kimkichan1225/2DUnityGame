@@ -136,7 +136,10 @@ public class MonsterController : MonoBehaviour
 
         if (animator != null) animator.SetTrigger(attackHash);
 
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(1f); // 공격 애니메이션 시간
+
+        // 공격 후 0.5초 경직
+        yield return new WaitForSeconds(0.3f);
 
         isAttacking = false;
         isMoving = true;
