@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using System.Collections;
 
 public class PlayerController : MonoBehaviour
@@ -59,6 +60,27 @@ public class PlayerController : MonoBehaviour
     private LanceAttack lanceAttack;
 
     public WeaponStats currentWeaponStats;
+
+    private void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // 씬에 PlayerSpawnPoint가 있는지 찾습니다.
+        PlayerSpawnPoint spawnPoint = FindObjectOfType<PlayerSpawnPoint>();
+        if (spawnPoint != null)
+        {
+            // 스폰 포인트가 있으면 플레이어를 그 위치로 이동시킵니다.
+            transform.position = spawnPoint.transform.position;
+        }
+    }
 
     private void Awake()
     {
