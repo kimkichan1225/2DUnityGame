@@ -193,6 +193,11 @@ public class MonsterHealth : MonoBehaviour
             healthBar.gameObject.SetActive(false);
 
         // 사망 애니메이션 재생 후 파괴
+        ItemDrop itemDropper = GetComponent<ItemDrop>();
+        if (itemDropper != null)
+        {
+            itemDropper.GenerateDrops();
+        }
         StartCoroutine(DestroyAfterAnimation());
     }
 

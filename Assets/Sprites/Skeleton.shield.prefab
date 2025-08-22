@@ -389,6 +389,7 @@ GameObject:
   - component: {fileID: 6457116287576331201}
   - component: {fileID: 6457116287576331202}
   - component: {fileID: 6457116287576331203}
+  - component: {fileID: 8979790303987602757}
   m_Layer: 7
   m_Name: Skeleton.shield
   m_TagString: Enemy
@@ -590,6 +591,20 @@ MonoBehaviour:
   wallCheckDistance: 0.1
   ledgeCheckDistance: 0.2
   walkSound: {fileID: 8300000, guid: 2352822feb4caa14ebdbc0c713289f8d, type: 3}
+--- !u!114 &8979790303987602757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6457116287576331260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fda212d1d7d2626418c0a6bb0d8f9d2b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  baseGoldDrop: 100
+  goldDropRange: 0.2
 --- !u!1 &6457116287886317019
 GameObject:
   m_ObjectHideFlags: 0

@@ -2,9 +2,13 @@ using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
 {
+    public delegate void OnMoneyChanged(int currentMoney);
+    public static event OnMoneyChanged onMoneyChanged;
+
     public int level = 1;
     public int currentXp = 0;
     public int xpToNextLevel = 100;
+    public int currentMoney = 0;
 
     [Header("Permanent Stat Bonuses")]
     public int bonusAttackPower = 0;
@@ -29,6 +33,30 @@ public class PlayerStats : MonoBehaviour
         {
             uiManager.UpdateLevelText(level);
             uiManager.UpdateXpBar(currentXp, xpToNextLevel);
+        }
+        // Notify UI about initial money
+        onMoneyChanged?.Invoke(currentMoney);
+    }
+
+    public void AddMoney(int amount)
+    {
+        currentMoney += amount;
+        onMoneyChanged?.Invoke(currentMoney);
+        Debug.Log($"{amount} gold acquired. Total gold: {currentMoney}");
+    }
+
+    public bool SpendMoney(int amount)
+    {
+        if (currentMoney >= amount)
+        {
+            currentMoney -= amount;
+            onMoneyChanged?.Invoke(currentMoney);
+            return true;
+        }
+        else
+        {
+            Debug.Log("Not enough gold.");
+            return false;
         }
     }
 

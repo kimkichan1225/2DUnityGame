@@ -1,26 +1,38 @@
 using UnityEngine;
 
-// 아이템 드롭 기능을 관리하는 클래스
+// 골드 드롭 기능을 관리하는 클래스
 public class ItemDrop : MonoBehaviour
 {
-    [Header("드롭 설정")]
-    [SerializeField] private GameObject[] possibleDrops; // 드롭 가능한 아이템 프리팹 배열
-    [SerializeField] private float dropChance = 0.5f;   // 아이템 드롭 확률 (0~1)
-    [SerializeField] private Vector3 dropOffset = new Vector3(0, 0.5f, 0); // 드롭 위치 오프셋
+    [Header("골드 드롭 설정")]
+    [SerializeField] private int baseGoldDrop = 10; // 기본 골드 드롭 양
+    [SerializeField] [Range(0, 1)] private float goldDropRange = 0.2f; // 골드 드롭 양의 변동 범위 (+-)
 
-    // 아이템 드롭 실행
-    public void DropItem()
+    private PlayerStats playerStats;
+
+    private void Start()
     {
-        if (possibleDrops == null || possibleDrops.Length == 0) return;
+        // 플레이어 스탯을 미리 찾아두어 성능 최적화
+        playerStats = FindObjectOfType<PlayerStats>();
+    }
 
-        // 드롭 확률 체크
-        if (Random.value <= dropChance)
+    // 골드 드롭 실행
+    public void GenerateDrops()
+    {
+        DropGold();
+    }
+
+    private void DropGold()
+    {
+        if (baseGoldDrop <= 0) return;
+
+        // 골드 드롭 양 계산 (기본값 +- 20%)
+        int minGold = Mathf.RoundToInt(baseGoldDrop * (1 - goldDropRange));
+        int maxGold = Mathf.RoundToInt(baseGoldDrop * (1 + goldDropRange));
+        int amount = Random.Range(minGold, maxGold + 1);
+
+        if (amount > 0 && playerStats != null)
         {
-            // 랜덤한 아이템 선택
-            int randomIndex = Random.Range(0, possibleDrops.Length);
-            // 아이템 생성
-            Instantiate(possibleDrops[randomIndex], transform.position + dropOffset, Quaternion.identity);
-            Debug.Log("아이템이 드롭되었습니다.");
+            playerStats.AddMoney(amount);
         }
     }
 }
