@@ -90,7 +90,7 @@ public class Lance : MonoBehaviour
         playerController.isAttacking = true; // 이동 제한 설정
 
         // 공격 중 x축 이동 방지
-        rb.velocity = new Vector2(0, rb.velocity.y);
+        rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
 
         // Attack1 애니메이션 실행
         animator.SetTrigger("LanceAttack1");
@@ -119,7 +119,7 @@ public class Lance : MonoBehaviour
         playerController.isAttacking = true;
 
         // 이동 제한
-        rb.velocity = new Vector2(0, rb.velocity.y);
+        rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
 
         // Attack2 애니메이션 실행
         animator.SetTrigger("LanceAttack2");

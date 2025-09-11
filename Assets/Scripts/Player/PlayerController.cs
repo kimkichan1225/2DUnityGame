@@ -122,19 +122,19 @@ public class PlayerController : MonoBehaviour
     {
         if (!canMove)
         {
-            playerRigidbody.velocity = new Vector2(0, playerRigidbody.velocity.y);
+            playerRigidbody.linearVelocity = new Vector2(0, playerRigidbody.linearVelocity.y);
             animator.SetFloat("Speed", 0);
             return;
         }
         if (!isGrounded && Mathf.Abs(lastContactNormal.x) > 0.7f)
         {
-            playerRigidbody.velocity = new Vector2(0, playerRigidbody.velocity.y);
+            playerRigidbody.linearVelocity = new Vector2(0, playerRigidbody.linearVelocity.y);
             animator.SetFloat("Speed", 0);
             return;
         }
         float move = Input.GetAxis("Horizontal");
         float currentSpeed = isAttacking ? attackMoveSpeed : moveSpeed;
-        playerRigidbody.velocity = new Vector2(move * currentSpeed, playerRigidbody.velocity.y);
+        playerRigidbody.linearVelocity = new Vector2(move * currentSpeed, playerRigidbody.linearVelocity.y);
         if (move > 0 && !facingRight) Flip();
         else if (move < 0 && facingRight) Flip();
         animator.SetFloat("Speed", Mathf.Abs(move));
@@ -146,14 +146,14 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.K) && jumpCount < 1)
         {
             jumpCount++;
-            playerRigidbody.velocity = Vector2.zero;
+            playerRigidbody.linearVelocity = Vector2.zero;
             playerRigidbody.AddForce(new Vector2(0, jumpForce));
             if (jumpSound != null) playerAudio.PlayOneShot(jumpSound);
             if (jumpDustPrefab != null && dustSpawnPoint != null) Destroy(Instantiate(jumpDustPrefab, dustSpawnPoint.position, Quaternion.identity), 0.4f);
         }
-        else if (Input.GetKeyUp(KeyCode.K) && playerRigidbody.velocity.y > 0)
+        else if (Input.GetKeyUp(KeyCode.K) && playerRigidbody.linearVelocity.y > 0)
         {
-            playerRigidbody.velocity *= 0.5f;
+            playerRigidbody.linearVelocity *= 0.5f;
         }
     }
 
@@ -180,7 +180,7 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("Dash", true);
         if (hasSword && playerHealth != null) StartCoroutine(playerHealth.StartInvincibility(dashDuration, blink: false));
         Vector2 dashDirection = facingRight ? Vector2.right : Vector2.left;
-        playerRigidbody.velocity = Vector2.zero;
+        playerRigidbody.linearVelocity = Vector2.zero;
         playerRigidbody.AddForce(dashDirection * dashForce, ForceMode2D.Impulse);
         AudioClip selectedDashSound = hasMace ? maceDashSound : (hasSword ? swordDashSound : (hasLance ? lanceDashSound : defaultDashSound));
         if (selectedDashSound != null) playerAudio.PlayOneShot(selectedDashSound);
@@ -202,10 +202,10 @@ public class PlayerController : MonoBehaviour
     private void HandleWallSlide()
     {
         isTouchingWall = Physics2D.OverlapCircle(wallCheck.position, wallCheckRadius, wallLayer);
-        if (!isGrounded && isTouchingWall && playerRigidbody.velocity.y < 0)
+        if (!isGrounded && isTouchingWall && playerRigidbody.linearVelocity.y < 0)
         {
             isWallSliding = true;
-            playerRigidbody.velocity = new Vector2(playerRigidbody.velocity.x, -wallSlideSpeed);
+            playerRigidbody.linearVelocity = new Vector2(playerRigidbody.linearVelocity.x, -wallSlideSpeed);
             animator.SetBool("Wall", true);
             jumpCount = 0;
             if (wallSlideSound != null && !walkAudioSource.isPlaying)
@@ -223,7 +223,7 @@ public class PlayerController : MonoBehaviour
         if (isWallSliding && Input.GetKeyDown(KeyCode.K))
         {
             float wallJumpDir = facingRight ? -1 : 1;
-            playerRigidbody.velocity = Vector2.zero;
+            playerRigidbody.linearVelocity = Vector2.zero;
             playerRigidbody.AddForce(new Vector2(wallJumpDir * moveSpeed * 60f, wallJumpForce));
             Flip();
             isWallSliding = false;

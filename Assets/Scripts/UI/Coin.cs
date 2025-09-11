@@ -73,7 +73,7 @@ public class Coin : MonoBehaviour
     {
         currentState = CoinState.Waiting;
         
-        rb.velocity = Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
         rb.isKinematic = true;
         col.isTrigger = true;
 

@@ -109,7 +109,7 @@ public class MonsterController : MonoBehaviour
 
         if (IsLedgeOrWallAhead())
         {
-            rb.velocity = new Vector2(0, rb.velocity.y);
+            rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
             animator.SetFloat(speedHash, 0f);
             isChasingPlayer = false;
             player = null;
@@ -122,7 +122,7 @@ public class MonsterController : MonoBehaviour
         float xScale = Mathf.Abs(initialScale.x);
         transform.localScale = new Vector3(xScale * moveDir, initialScale.y, initialScale.z);
 
-        rb.velocity = new Vector2(moveDir * moveSpeed, rb.velocity.y);
+        rb.linearVelocity = new Vector2(moveDir * moveSpeed, rb.linearVelocity.y);
 
         isMovingRight = moveDir > 0;
         isMoving = true;
@@ -135,7 +135,7 @@ public class MonsterController : MonoBehaviour
         canAttack = false;
         isAttacking = true;
         isMoving = false;
-        rb.velocity = Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
 
         if (animator != null) animator.SetTrigger(attackHash);
 
@@ -161,7 +161,7 @@ public class MonsterController : MonoBehaviour
 
         if (!isChasingPlayer && isMoving)
         {
-            rb.velocity = new Vector2(moveDir * moveSpeed, rb.velocity.y);
+            rb.linearVelocity = new Vector2(moveDir * moveSpeed, rb.linearVelocity.y);
         }
 
         float currentSpeed = isMoving ? moveSpeed : 0f;
@@ -204,7 +204,7 @@ public class MonsterController : MonoBehaviour
             }
 
             isMoving = false;
-            rb.velocity = Vector2.zero;
+            rb.linearVelocity = Vector2.zero;
             animator.SetFloat(speedHash, 0f);
             float pauseDuration = Random.Range(minPauseDuration, maxPauseDuration);
             yield return new WaitForSeconds(pauseDuration);
@@ -291,7 +291,7 @@ public class MonsterController : MonoBehaviour
             canAttack = true; // 공격을 즉시 다시 할 수 있게 할지, 아니면 쿨다운을 적용할지 결정 필요
         }
 
-        rb.velocity = Vector2.zero;
+        rb.linearVelocity = Vector2.zero;
         rb.AddForce(direction * force, ForceMode2D.Impulse);
 
         // Hurt 애니메이션 재생
