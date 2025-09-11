@@ -78,7 +78,7 @@ public class PlayerController : MonoBehaviour
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         // 씬에 PlayerSpawnPoint가 있는지 찾습니다.
-        PlayerSpawnPoint spawnPoint = FindObjectOfType<PlayerSpawnPoint>();
+        PlayerSpawnPoint spawnPoint = FindFirstObjectByType<PlayerSpawnPoint>();
         if (spawnPoint != null)
         {
             // 스폰 포인트가 있으면 플레이어를 그 위치로 이동시킵니다.

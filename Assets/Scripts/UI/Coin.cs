@@ -74,7 +74,7 @@ public class Coin : MonoBehaviour
         currentState = CoinState.Waiting;
         
         rb.linearVelocity = Vector2.zero;
-        rb.isKinematic = true;
+        rb.bodyType = RigidbodyType2D.Kinematic;
         col.isTrigger = true;
 
         yield return new WaitForSeconds(seekDelay);

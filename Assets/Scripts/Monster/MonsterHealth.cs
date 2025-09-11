@@ -173,7 +173,7 @@ public class MonsterHealth : MonoBehaviour
         isDead = true; // 사망 상태로 전환
 
         // 플레이어에게 경험치 제공
-        PlayerStats playerStats = FindObjectOfType<PlayerStats>();
+        PlayerStats playerStats = FindFirstObjectByType<PlayerStats>();
         if (playerStats != null)
         {
             playerStats.AddXp(xpValue);

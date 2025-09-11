@@ -26,7 +26,7 @@ public class CameraFollow : MonoBehaviour
 
     void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
-        CameraBounds bounds = FindObjectOfType<CameraBounds>();
+        CameraBounds bounds = FindFirstObjectByType<CameraBounds>();
         if (bounds != null)
         {
             minX = bounds.minX;

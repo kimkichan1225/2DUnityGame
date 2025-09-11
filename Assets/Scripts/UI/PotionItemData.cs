@@ -9,7 +9,7 @@ public class PotionItemData : ItemData
     {
         base.Use();
         // Find the PlayerHealth component and restore health
-        PlayerHealth playerHealth = FindObjectOfType<PlayerHealth>();
+        PlayerHealth playerHealth = FindFirstObjectByType<PlayerHealth>();
         if (playerHealth != null)
         {
             playerHealth.Heal(healthAmount);
