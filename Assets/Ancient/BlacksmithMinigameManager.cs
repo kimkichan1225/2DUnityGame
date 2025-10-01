@@ -36,6 +36,7 @@ public class BlacksmithMinigameManager : MonoBehaviour
     private float currentTime;
     private int score;
     private bool isGameActive = true; // 게임 활성화 상태 변수 추가
+    private bool hasGameStarted = false; // 게임이 시작되었는지 확인하는 플래그
 
     void Awake()
     {
@@ -45,6 +46,9 @@ public class BlacksmithMinigameManager : MonoBehaviour
 
     void Start()
     {
+        // ★★★ 이 부분을 추가하세요 ★★★
+        hasGameStarted = false; // 씬이 시작될 때 플래그 초기화
+        // --- 여기까지 ---
         isGamePausedByManager = false;
         if (rewardPanel != null) rewardPanel.SetActive(false);
         Time.timeScale = 0f; // 게임 일시정지
@@ -66,9 +70,19 @@ public class BlacksmithMinigameManager : MonoBehaviour
     }
     public void StartMinigame()
     {
-        Time.timeScale = 1f; // 멈췄던 게임 시간을 다시 흐르게 합니다.
-        isGameActive = true;
+        // ★★★ 이 부분이 수정되었습니다 ★★★
+        // 만약 게임이 이미 시작되었다면, 아무것도 하지 않고 함수를 즉시 종료합니다.
+        if (hasGameStarted)
+        {
+            Debug.LogWarning("StartMinigame()이 중복 호출되었지만, 무시되었습니다.");
+            return;
+        }
+        // 게임이 시작되었다고 플래그를 true로 설정합니다.
+        hasGameStarted = true;
+        // --- 여기까지 ---
 
+        Time.timeScale = 1f;
+        isGameActive = true;
         currentTime = gameDuration;
         score = 0;
         UpdateScoreUI();
