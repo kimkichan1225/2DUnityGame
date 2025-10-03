@@ -1,4 +1,4 @@
-// ÆÄÀÏ¸í: MinigameManager.cs (ÃÖÁ¾ ¾÷±×·¹ÀÌµå ¹öÀü)
+// ï¿½ï¿½ï¿½Ï¸ï¿½: MinigameManager.cs (ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½×·ï¿½ï¿½Ìµï¿½ ï¿½ï¿½ï¿½ï¿½)
 using UnityEngine;
 using System.Collections;
 using TMPro;
@@ -6,59 +6,59 @@ using UnityEngine.SceneManagement;
 
 public class MinigameManager : MonoBehaviour
 {
-    [Header("´ëÈ­ UI")]
+    [Header("ï¿½ï¿½È­ UI")]
     [SerializeField] private GameObject dialoguePanel;
     [SerializeField] private TextMeshProUGUI dialogueText;
 
-    [Header("¹Ì´Ï°ÔÀÓ UI")]
+    [Header("ï¿½Ì´Ï°ï¿½ï¿½ï¿½ UI")]
     [SerializeField] private GameObject minigameUI;
     [SerializeField] private TextMeshProUGUI timerText;
     [SerializeField] private TextMeshProUGUI tapCountText;
 
-    [Header("º¸»ó UI")]
+    [Header("ï¿½ï¿½ï¿½ï¿½ UI")]
     [SerializeField] private GameObject rewardPanel;
     [SerializeField] private TextMeshProUGUI rewardText;
 
-    [Header("´ëÈ­ ³»¿ë")]
+    [Header("ï¿½ï¿½È­ ï¿½ï¿½ï¿½ï¿½")]
     [SerializeField, TextArea(3, 10)] private string[] storyDialogue;
     [SerializeField, TextArea(3, 10)] private string[] instructionDialogue;
 
-    [Header("¹Ì´Ï°ÔÀÓ ¼³Á¤")]
+    [Header("ï¿½Ì´Ï°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½")]
     [SerializeField] private float gameDuration = 10f;
 
     private int finalTapCount = 0;
 
     void Start()
     {
-        // ½ÃÀÛ ½Ã ¸ðµç UI¸¦ ²ö »óÅÂ·Î ´ë±â
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ UIï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½Â·ï¿½ ï¿½ï¿½ï¿½
         dialoguePanel.SetActive(false);
         minigameUI.SetActive(false);
         rewardPanel.SetActive(false);
     }
 
-    // DialogueTrigger°¡ ÀÌ ÇÔ¼ö¸¦ È£ÃâÇÏ¿© ÀüÃ¼ ½ÃÄö½º¸¦ ½ÃÀÛ
+    // DialogueTriggerï¿½ï¿½ ï¿½ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½ È£ï¿½ï¿½ï¿½Ï¿ï¿½ ï¿½ï¿½Ã¼ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public void StartEventSequence()
     {
         StartCoroutine(FullSequenceCoroutine());
     }
 
-    // ÀüÃ¼ Èå¸§À» Á¦¾îÇÏ´Â ¸ÞÀÎ ÄÚ·çÆ¾
+    // ï¿½ï¿½Ã¼ ï¿½å¸§ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ú·ï¿½Æ¾
     private IEnumerator FullSequenceCoroutine()
     {
         yield return StartCoroutine(ShowDialogue(storyDialogue));
         yield return StartCoroutine(ShowDialogue(instructionDialogue));
         yield return StartCoroutine(MinigameCoroutine());
 
-        // GameManagerÀÇ ProcessMinigameResult¸¦ Á÷Á¢ È£Ãâ
-        if (GameManager.Instance != null)
+        // LifeGameManagerï¿½ï¿½ ProcessMinigameResultï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È£ï¿½ï¿½
+        if (LifeGameManager.Instance != null)
         {
-            GameManager.Instance.ProcessMinigameResult(finalTapCount);
+            LifeGameManager.Instance.ProcessMinigameResult(finalTapCount);
         }
 
         ProcessAndShowReward();
     }
 
-    // ´ëÈ­Ã¢À» ¶ç¿ì°í ÁøÇàÇÏ´Â ÄÚ·çÆ¾
+    // ï¿½ï¿½È­Ã¢ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ú·ï¿½Æ¾
     private IEnumerator ShowDialogue(string[] dialogueLines)
     {
         dialoguePanel.SetActive(true);
@@ -71,7 +71,7 @@ public class MinigameManager : MonoBehaviour
         dialoguePanel.SetActive(false);
     }
 
-    // ¹Ì´Ï°ÔÀÓ ÁøÇà ÄÚ·çÆ¾
+    // ï¿½Ì´Ï°ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ú·ï¿½Æ¾
     private IEnumerator MinigameCoroutine()
     {
         minigameUI.SetActive(true);
@@ -94,13 +94,13 @@ public class MinigameManager : MonoBehaviour
         minigameUI.SetActive(false);
     }
 
-    // º¸»ó ³»¿ë Ã³¸® ¹× Ç¥½Ã
+    // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Ã³ï¿½ï¿½ ï¿½ï¿½ Ç¥ï¿½ï¿½
     private void ProcessAndShowReward()
     {
         string rewardMessage = "No rewards have been obtained.";
-        if (GameManager.Instance != null)
+        if (LifeGameManager.Instance != null)
         {
-            float buffValue = GameManager.Instance.regenBuffValue;
+            float buffValue = LifeGameManager.Instance.regenBuffValue;
             if (buffValue >= 1.0f) rewardMessage = "I can feel the overflowing power of life!\n[Heal] Get buffs (Strong) (Boss play)";
             else if (buffValue >= 0.5f) rewardMessage = "I won the tears of an old tree!\n[Heal] Get buffs(Weak)(Boss play)";
             else if (buffValue > 0f) rewardMessage = "I barely felt the energy of life.";
@@ -110,14 +110,14 @@ public class MinigameManager : MonoBehaviour
         rewardPanel.SetActive(true);
     }
 
-    // º¸»ó Ã¢ÀÇ "µ¹¾Æ°¡±â" ¹öÆ°¿¡ ¿¬°áÇÒ ÇÔ¼ö
+    // ï¿½ï¿½ï¿½ï¿½ Ã¢ï¿½ï¿½ "ï¿½ï¿½ï¿½Æ°ï¿½ï¿½ï¿½" ï¿½ï¿½Æ°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½
     public void OnClickReturnButton()
     {
-        if (GameManager.Instance != null && !string.IsNullOrEmpty(GameManager.Instance.sceneNameBeforePortal))
+        if (LifeGameManager.Instance != null && !string.IsNullOrEmpty(LifeGameManager.Instance.sceneNameBeforePortal))
         {
-            // PlayerSpawner¸¦ »ç¿ëÇÏÁö ¾Ê°í, GameManagerÀÇ Á¤º¸·Î Á÷Á¢ ÀÌµ¿
-            SceneManager.LoadScene(GameManager.Instance.sceneNameBeforePortal);
-            // ¾ÀÀÌ ·ÎµåµÈ ÈÄ ÇÃ·¹ÀÌ¾î À§Ä¡¸¦ ¼³Á¤ÇÏ´Â ·ÎÁ÷ÀÌ ÇÊ¿ä (¿¹: PlayerStartPoint ½ºÅ©¸³Æ®)
+            // PlayerSpawnerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê°ï¿½, LifeGameManagerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½
+            SceneManager.LoadScene(LifeGameManager.Instance.sceneNameBeforePortal);
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½ï¿½ ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¿ï¿½ (ï¿½ï¿½: PlayerStartPoint ï¿½ï¿½Å©ï¿½ï¿½Æ®)
         }
     }
 }
