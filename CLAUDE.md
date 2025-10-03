@@ -33,8 +33,8 @@ This is a 2D action RPG game project called "Graduation" built with Unity 6000.0
 - `PlayerController.cs:5`: Main player control with movement, combat, and weapon management
 - `GameData.cs:3`: Static data persistence across scenes
 - `WeaponStats.cs`: ScriptableObject defining weapon properties
-- `Inventory.cs`: Singleton inventory management system
-- `StatsUIManager.cs`: Centralizes UI stat display updates
+- `Inventory.cs:4`: Singleton inventory management system
+- `StatsUIManager.cs:4`: Centralizes UI stat display updates
 
 ## Development Commands
 
