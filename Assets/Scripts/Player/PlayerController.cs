@@ -115,7 +115,7 @@ public class PlayerController : MonoBehaviour
     {
         // ★★★ GameManager와의 연동을 위한 핵심 로직 ★★★
         // GameManager가 존재하고, 현재 상태가 '전투'라면 모든 입력을 무시합니다.
-        if (GameManager.Instance != null && GameManager.Instance.currentState == GameState.Battle)
+        if (BossGameManager.Instance != null && BossGameManager.Instance.currentState == GameState.Battle)
         {
             // 혹시 남아있을 수 있는 물리적 움직임을 강제로 멈춥니다.
             if (playerRigidbody.linearVelocity.sqrMagnitude > 0)
