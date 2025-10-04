@@ -1,55 +1,55 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI; // Button ÄÄÆ÷³ÍÆ®¸¦ »ç¿ëÇÏ±â À§ÇØ ÇÊ¼ö!
+using UnityEngine.UI; // Button ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ï±ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¼ï¿½!
 
 public class PortalController : MonoBehaviour
 {
     private static List<string> usedPortalIDs = new List<string>();
 
-    [Header("Æ÷Å» ¼³Á¤")]
-    [Tooltip("ÀÌ Æ÷Å»À» ½Äº°ÇÒ °íÀ¯ÇÑ ID¸¦ ÁöÁ¤ÇÏ¼¼¿ä. (¿¹: HiddenPortal_Stage1)")]
+    [Header("ï¿½ï¿½Å» ï¿½ï¿½ï¿½ï¿½")]
+    [Tooltip("ï¿½ï¿½ ï¿½ï¿½Å»ï¿½ï¿½ ï¿½Äºï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ IDï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½. (ï¿½ï¿½: HiddenPortal_Stage1)")]
     public string portalID = "HiddenPortal";
 
-    [Header("ÇÃ·¹ÀÌ¾î º¹±Í ÁöÁ¡")]
-    [Tooltip("ÇÃ·¹ÀÌ¾î°¡ µ¹¾Æ¿Ã À§Ä¡¸¦ ÁöÁ¤ÇÏ´Â ºó ¿ÀºêÁ§Æ®")]
+    [Header("ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½")]
+    [Tooltip("ï¿½Ã·ï¿½ï¿½Ì¾î°¡ ï¿½ï¿½ï¿½Æ¿ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®")]
     [SerializeField] private Transform returnSpawnPoint;
 
-    [Header("Ã£¾Æ¿Ã UI Á¤º¸")]
-    [Tooltip("Hierarchy Ã¢¿¡ ÀÖ´Â È®ÀÎÃ¢ UI ÆÐ³ÎÀÇ Á¤È®ÇÑ ÀÌ¸§À» ÀÔ·ÂÇÏ¼¼¿ä.")]
+    [Header("Ã£ï¿½Æ¿ï¿½ UI ï¿½ï¿½ï¿½ï¿½")]
+    [Tooltip("Hierarchy Ã¢ï¿½ï¿½ ï¿½Ö´ï¿½ È®ï¿½ï¿½Ã¢ UI ï¿½Ð³ï¿½ï¿½ï¿½ ï¿½ï¿½È®ï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½.")]
     [SerializeField] private string confirmationPanelName = "ConfirmationPanel";
 
-    // --- ¿äÃ»ÇÏ½Å º¯¼öµéÀÌ ¿©±â¿¡ ÇÕÃÄÁ³½À´Ï´Ù ---
-    [Tooltip("È®ÀÎÃ¢ ÆÐ³Î ¾È¿¡ ÀÖ´Â 'È®ÀÎ' ¹öÆ°ÀÇ ÀÌ¸§À» ÀÔ·ÂÇÏ¼¼¿ä.")]
+    // --- ï¿½ï¿½Ã»ï¿½Ï½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½â¿¡ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ---
+    [Tooltip("È®ï¿½ï¿½Ã¢ ï¿½Ð³ï¿½ ï¿½È¿ï¿½ ï¿½Ö´ï¿½ 'È®ï¿½ï¿½' ï¿½ï¿½Æ°ï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½.")]
     [SerializeField] private string confirmButtonName = "ConfirmButton";
-    [Tooltip("È®ÀÎÃ¢ ÆÐ³Î ¾È¿¡ ÀÖ´Â 'Ãë¼Ò' ¹öÆ°ÀÇ ÀÌ¸§À» ÀÔ·ÂÇÏ¼¼¿ä.")]
+    [Tooltip("È®ï¿½ï¿½Ã¢ ï¿½Ð³ï¿½ ï¿½È¿ï¿½ ï¿½Ö´ï¿½ 'ï¿½ï¿½ï¿½' ï¿½ï¿½Æ°ï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ ï¿½Ô·ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½.")]
     [SerializeField] private string cancelButtonName = "CancelButton";
-    // --- ¿©±â±îÁö ---
+    // --- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ---
 
-    [Header("ÀÌµ¿ÇÒ ¾À ¼³Á¤")]
+    [Header("ï¿½Ìµï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½")]
     [SerializeField] private string sceneToLoad;
 
     private GameObject confirmationPanelObject;
 
     private void Start()
     {
-        // --- ¡Ú¡Ú¡Ú ÀÌ ºÎºÐÀ» Ãß°¡ÇÏ¼¼¿ä ¡Ú¡Ú¡Ú ---
-        // ¾ÀÀÌ ½ÃÀÛµÉ ¶§, ÀÌ Æ÷Å»ÀÇ ID°¡ ÀÌ¹Ì »ç¿ëµÈ ¸ñ·Ï¿¡ ÀÖ´ÂÁö È®ÀÎÇÕ´Ï´Ù.
+        // --- ï¿½Ú¡Ú¡ï¿½ ï¿½ï¿½ ï¿½Îºï¿½ï¿½ï¿½ ï¿½ß°ï¿½ï¿½Ï¼ï¿½ï¿½ï¿½ ï¿½Ú¡Ú¡ï¿½ ---
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ûµï¿½ ï¿½ï¿½, ï¿½ï¿½ ï¿½ï¿½Å»ï¿½ï¿½ IDï¿½ï¿½ ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ï¿ï¿½ ï¿½Ö´ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
         if (usedPortalIDs.Contains(portalID))
         {
-            // ¸¸¾à ÀÌ¹Ì »ç¿ëµÇ¾ú´Ù¸é, Áï½Ã ½º½º·Î¸¦ ÆÄ±«ÇÏ°í ¾Æ¹«°Íµµ ÇÏÁö ¾Ê½À´Ï´Ù.
+            // ï¿½ï¿½ï¿½ï¿½ ï¿½Ì¹ï¿½ ï¿½ï¿½ï¿½Ç¾ï¿½ï¿½Ù¸ï¿½, ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Î¸ï¿½ ï¿½Ä±ï¿½ï¿½Ï°ï¿½ ï¿½Æ¹ï¿½ï¿½Íµï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ê½ï¿½ï¿½Ï´ï¿½.
             Destroy(gameObject);
             return;
         }
-        // --- ¿©±â±îÁö ---
+        // --- ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ---
 
         SetupUIAndButtons();
     }
 
-    // UI¸¦ Ã£°í ¹öÆ° ÀÌº¥Æ®¸¦ ¼³Á¤ÇÏ´Â ÇÔ¼ö
+    // UIï¿½ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½Æ° ï¿½Ìºï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Ô¼ï¿½
     private void SetupUIAndButtons()
     {
-        // ¾À¿¡ ÀÖ´Â ¸ðµç Äµ¹ö½º¸¦ µÚÁ®¼­ È®ÀÎÃ¢ ÆÐ³ÎÀ» Ã£½À´Ï´Ù (ºñÈ°¼ºÈ­µÈ °Íµµ Æ÷ÇÔ).
+        // ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ Äµï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½Ã¢ ï¿½Ð³ï¿½ï¿½ï¿½ Ã£ï¿½ï¿½ï¿½Ï´ï¿½ (ï¿½ï¿½È°ï¿½ï¿½È­ï¿½ï¿½ ï¿½Íµï¿½ ï¿½ï¿½ï¿½ï¿½).
         Canvas[] canvases = FindObjectsOfType<Canvas>(true);
         foreach (Canvas canvas in canvases)
         {
@@ -58,43 +58,43 @@ public class PortalController : MonoBehaviour
             {
                 confirmationPanelObject = panelTransform.gameObject;
 
-                // --- ¡Ú¡Ú¡Ú ¹öÆ°À» Ã£°í ÀÌº¥Æ®¸¦ ÄÚµå·Î ¿¬°áÇÏ´Â ºÎºÐ ¡Ú¡Ú¡Ú ---
+                // --- ï¿½Ú¡Ú¡ï¿½ ï¿½ï¿½Æ°ï¿½ï¿½ Ã£ï¿½ï¿½ ï¿½Ìºï¿½Æ®ï¿½ï¿½ ï¿½Úµï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½ ï¿½Îºï¿½ ï¿½Ú¡Ú¡ï¿½ ---
 
-                // 1. È®ÀÎ ¹öÆ° Ã£±â ¹× OnConfirm ÇÔ¼ö ¿¬°á
+                // 1. È®ï¿½ï¿½ ï¿½ï¿½Æ° Ã£ï¿½ï¿½ ï¿½ï¿½ OnConfirm ï¿½Ô¼ï¿½ ï¿½ï¿½ï¿½ï¿½
                 Transform confirmButtonT = panelTransform.Find(confirmButtonName);
                 if (confirmButtonT != null)
                 {
                     Button confirmButton = confirmButtonT.GetComponent<Button>();
                     if (confirmButton != null)
                     {
-                        confirmButton.onClick.RemoveAllListeners(); // ±âÁ¸ ¿¬°á Á¦°Å (Áßº¹ ¹æÁö)
-                        confirmButton.onClick.AddListener(OnConfirm); // OnConfirm ÇÔ¼ö¸¦ ÄÚµå·Î ¿¬°á
+                        confirmButton.onClick.RemoveAllListeners(); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ (ï¿½ßºï¿½ ï¿½ï¿½ï¿½ï¿½)
+                        confirmButton.onClick.AddListener(OnConfirm); // OnConfirm ï¿½Ô¼ï¿½ï¿½ï¿½ ï¿½Úµï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                     }
                 }
 
-                // 2. Ãë¼Ò ¹öÆ° Ã£±â ¹× OnCancel ÇÔ¼ö ¿¬°á
+                // 2. ï¿½ï¿½ï¿½ ï¿½ï¿½Æ° Ã£ï¿½ï¿½ ï¿½ï¿½ OnCancel ï¿½Ô¼ï¿½ ï¿½ï¿½ï¿½ï¿½
                 Transform cancelButtonT = panelTransform.Find(cancelButtonName);
                 if (cancelButtonT != null)
                 {
                     Button cancelButton = cancelButtonT.GetComponent<Button>();
                     if (cancelButton != null)
                     {
-                        cancelButton.onClick.RemoveAllListeners(); // ±âÁ¸ ¿¬°á Á¦°Å
-                        cancelButton.onClick.AddListener(OnCancel);   // OnCancel ÇÔ¼ö¸¦ ÄÚµå·Î ¿¬°á
+                        cancelButton.onClick.RemoveAllListeners(); // ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+                        cancelButton.onClick.AddListener(OnCancel);   // OnCancel ï¿½Ô¼ï¿½ï¿½ï¿½ ï¿½Úµï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                     }
                 }
 
-                break; // Ã£¾ÒÀ¸¸é ·çÇÁ Á¾·á
+                break; // Ã£ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
             }
         }
 
         if (confirmationPanelObject == null)
         {
-            Debug.LogError($"'{confirmationPanelName}' ÀÌ¸§ÀÇ UI¸¦ ¾À¿¡¼­ Ã£À» ¼ö ¾ø½À´Ï´Ù! Hierarchy Ã¢¿¡¼­ UI ¿ÀºêÁ§Æ®ÀÇ ÀÌ¸§À» È®ÀÎÇØÁÖ¼¼¿ä.", this.gameObject);
+            Debug.LogError($"'{confirmationPanelName}' ï¿½Ì¸ï¿½ï¿½ï¿½ UIï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ã£ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï´ï¿½! Hierarchy Ã¢ï¿½ï¿½ï¿½ï¿½ UI ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½Ì¸ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½ï¿½ï¿½Ö¼ï¿½ï¿½ï¿½.", this.gameObject);
         }
         else
         {
-            confirmationPanelObject.SetActive(false); // Ã£Àº UI¸¦ ºñÈ°¼ºÈ­
+            confirmationPanelObject.SetActive(false); // Ã£ï¿½ï¿½ UIï¿½ï¿½ ï¿½ï¿½È°ï¿½ï¿½È­
         }
     }
 
@@ -129,7 +129,7 @@ public class PortalController : MonoBehaviour
                 usedPortalIDs.Add(portalID);
             }
 
-            // --- PortalReturnManager°¡ »ç¿ëÇÒ ¼ö ÀÖµµ·Ï PortalReturnData¿¡ Á¤º¸¸¦ ÀúÀåÇÕ´Ï´Ù ---
+            // --- PortalReturnManagerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½Öµï¿½ï¿½ï¿½ PortalReturnDataï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½ ---
             if (returnSpawnPoint != null)
             {
                 PortalReturnData.hasReturnInfo = true;
@@ -138,33 +138,33 @@ public class PortalController : MonoBehaviour
             }
             else
             {
-                Debug.LogError("Return Spawn Point°¡ PortalController¿¡ ¿¬°áµÇÁö ¾Ê¾Ò½À´Ï´Ù! Inspector¸¦ È®ÀÎÇØÁÖ¼¼¿ä.", this.gameObject);
+                Debug.LogError("Return Spawn Pointï¿½ï¿½ PortalControllerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê¾Ò½ï¿½ï¿½Ï´ï¿½! Inspectorï¿½ï¿½ È®ï¿½ï¿½ï¿½ï¿½ï¿½Ö¼ï¿½ï¿½ï¿½.", this.gameObject);
                 return;
             }
 
-            // 2. GameManager¿¡ º¹±Í Á¤º¸¸¦ ÀúÀåÇÕ´Ï´Ù (±âÁ¸ ±â´É À¯Áö).
-            if (GameManager.Instance != null)
+            // 2. LifeGameManagerï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½ (ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½).
+            if (LifeGameManager.Instance != null)
             {
-                // ¡Ú¡Ú¡Ú ÇÙ½É º¯°æÁ¡ ¡Ú¡Ú¡Ú
-                // ÇÃ·¹ÀÌ¾îÀÇ ÇöÀç À§Ä¡ ´ë½Å, ÁöÁ¤µÈ ReturnSpawnPointÀÇ À§Ä¡¸¦ ÀúÀåÇÕ´Ï´Ù.
+                // ï¿½Ú¡Ú¡ï¿½ ï¿½Ù½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ú¡Ú¡ï¿½
+                // ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ReturnSpawnPointï¿½ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
                 if (returnSpawnPoint != null)
                 {
-                    GameManager.Instance.playerPositionBeforePortal = returnSpawnPoint.position;
+                    LifeGameManager.Instance.playerPositionBeforePortal = returnSpawnPoint.position;
                 }
                 else
                 {
-                    // ¾ÈÀüÀåÄ¡: ¸¸¾à returnSpawnPoint°¡ ¿¬°á ¾ÈµÆÀ¸¸é ±×³É ÇöÀç ÇÃ·¹ÀÌ¾î À§Ä¡ ÀúÀå
+                    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä¡: ï¿½ï¿½ï¿½ï¿½ returnSpawnPointï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Èµï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½×³ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ã·ï¿½ï¿½Ì¾ï¿½ ï¿½ï¿½Ä¡ ï¿½ï¿½ï¿½ï¿½
                     GameObject player = GameObject.FindGameObjectWithTag("Player");
                     if (player != null)
                     {
-                        GameManager.Instance.playerPositionBeforePortal = player.transform.position;
+                        LifeGameManager.Instance.playerPositionBeforePortal = player.transform.position;
                     }
                 }
 
-                GameManager.Instance.sceneNameBeforePortal = SceneManager.GetActiveScene().name;
+                LifeGameManager.Instance.sceneNameBeforePortal = SceneManager.GetActiveScene().name;
             }
 
-            // 3. ¾ÀÀ» ÀÌµ¿ÇÕ´Ï´Ù (±âÁ¸ ±â´É À¯Áö).
+            // 3. ï¿½ï¿½ï¿½ï¿½ ï¿½Ìµï¿½ï¿½Õ´Ï´ï¿½ (ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½).
             SceneManager.LoadScene(sceneToLoad);
         }
         Destroy(gameObject);
