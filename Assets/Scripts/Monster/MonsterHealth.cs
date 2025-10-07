@@ -29,6 +29,11 @@ public class MonsterHealth : MonoBehaviour
     public GameObject damageTextPrefab; // 데미지 텍스트 프리팹
     public Vector3 damageTextOffset = new Vector3(0, 1f, 0); // 데미지 텍스트 표시 오프셋
 
+    [Header("타격 이펙트")]
+    public GameObject hitEffectPrefab; // 타격 이펙트 프리팹
+    public Vector3 hitEffectOffset = new Vector3(0, 0.5f, 0); // 타격 이펙트 표시 오프셋
+    public float hitEffectDuration = 0.5f; // 타격 이펙트 지속 시간
+
     [SerializeField] private AudioClip deathSound; // 사망 사운드 클립
     [SerializeField] private AudioClip hitSound;   // 피격 사운드 클립
     [SerializeField] private float deathAnimationDuration = 1f; // 사망 애니메이션 지속 시간 (초)
@@ -148,6 +153,14 @@ public class MonsterHealth : MonoBehaviour
         if (hitSound != null && audioSource != null)
         {
             audioSource.PlayOneShot(hitSound);
+        }
+
+        // 타격 이펙트 생성
+        if (hitEffectPrefab != null)
+        {
+            Vector3 effectPosition = transform.position + hitEffectOffset;
+            GameObject effect = Instantiate(hitEffectPrefab, effectPosition, Quaternion.identity);
+            Destroy(effect, hitEffectDuration); // 지정된 시간 후 자동 삭제
         }
 
         // 데미지 텍스트 생성 (월드 공간)
