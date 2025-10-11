@@ -5,9 +5,9 @@ using UnityEngine;
 // 게임의 상태를 명확히 정의하는 열거형(enum)
 public enum GameState { Exploration, Battle }
 
-public class GameManager : MonoBehaviour
+public class BossGameManager : MonoBehaviour
 {
-    public static GameManager Instance; // 어디서든 접근할 수 있는 싱글톤
+    public static BossGameManager Instance; // 어디서든 접근할 수 있는 싱글톤
 
     [Header("관리 대상 컨트롤러")]
     public PlayerController playerController;
