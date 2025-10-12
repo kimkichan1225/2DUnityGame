@@ -34,18 +34,14 @@ public class BattleController : MonoBehaviour
     public TextMeshProUGUI victoryText;
     public string nextStageName = "Stage2";
 
-    // --- 페이지네이션 변수 ---
     private int currentPage = 0;
     private const int cardsPerPage = 3;
-
-    // --- 턴 진행 및 상태 변수 ---
     private bool isPlayerActionsConfirmed = false;
     private bool isViewingBoss = false;
     private List<CardUI> displayedCardUIs = new List<CardUI>();
     private List<CardUI> playerActionQueueUI = new List<CardUI>();
     private List<CombatPage> bossActionQueue = new List<CombatPage>();
 
-    // 외부에서 현재 덱 보기 모드를 확인할 수 있는 함수
     public bool IsViewingBossDeck() => isViewingBoss;
 
     void Start()
@@ -76,6 +72,14 @@ public class BattleController : MonoBehaviour
 
     IEnumerator SetupBattle()
     {
+        if (player == null)
+        {
+            if (PlayerController.Instance != null)
+            {
+                player = PlayerController.Instance.GetComponent<CharacterStats>();
+            }
+        }
+
         if (player != null)
         {
             player.InitializeFromPlayerScripts();
@@ -286,7 +290,10 @@ public class BattleController : MonoBehaviour
         else if (defeatedCharacter == player)
         {
             Debug.Log("플레이어가 패배했습니다...");
+<<<<<<< HEAD
             // (추후 여기에 패배 로직 추가)
+=======
+>>>>>>> Song
         }
     }
 
@@ -301,6 +308,14 @@ public class BattleController : MonoBehaviour
 
         yield return new WaitForSeconds(10f);
 
+<<<<<<< HEAD
+=======
+        if (BossGameManager.Instance != null)
+        {
+            BossGameManager.Instance.ChangeState(GameState.Exploration);
+        }
+        
+>>>>>>> Song
         SceneManager.LoadScene(nextStageName);
     }
 }
