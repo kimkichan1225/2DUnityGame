@@ -14,6 +14,11 @@ public class ClamMonsterController : MonoBehaviour
     [SerializeField] private AudioClip attackSound;
     [SerializeField] private BoxCollider2D attackHitbox;
 
+    [Header("드롭 아이템")]
+    [SerializeField] private GameObject pearlPrefab;
+
+    private bool hasDroppedPearl = false; // 진주를 이미 드롭했는지 확인하는 스위치
+
     private Rigidbody2D rb;
     private MonsterHealth monsterHealth;
     private Animator animator;
@@ -43,8 +48,27 @@ public class ClamMonsterController : MonoBehaviour
 
     void Update()
     {
-        if (monsterHealth != null && monsterHealth.IsDead || isStaggered) return;
+        // --- ▼▼▼ 수정된 부분 ▼▼▼ ---
+        // 1. 몬스터가 죽었고, 아직 진주를 드롭하지 않았다면
+        if (monsterHealth != null && monsterHealth.IsDead && !hasDroppedPearl)
+        {
+            // 진주 오브젝트를 몬스터의 위치에 생성합니다.
+            if (pearlPrefab != null)
+            {
+                Instantiate(pearlPrefab, transform.position, Quaternion.identity);
+            }
+            // 진주를 드롭했으므로 스위치를 켜서 다시는 드롭되지 않게 합니다.
+            hasDroppedPearl = true;
+        }
 
+        // 2. 몬스터가 죽었거나 비틀거리는 상태라면 아래 AI 행동을 실행하지 않고 함수를 종료합니다.
+        if (monsterHealth != null && monsterHealth.IsDead || isStaggered)
+        {
+            return;
+        }
+        // --- ▲▲▲▲▲▲▲▲▲▲▲▲▲ ---
+
+        // 몬스터가 살아있을 때만 아래 로직 실행
         DetectPlayer();
     }
 

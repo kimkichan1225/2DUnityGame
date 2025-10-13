@@ -13,37 +13,55 @@ public class PlayerOxygen : MonoBehaviour
     [Header("UI 설정")]
     public Slider oxygenSlider;
 
-    // --- 연동을 위해 추가된 변수들 ---
-    private PlayerHealth playerHealth; // PlayerHealth 스크립트를 참조할 변수
-    private bool isPlayerDead = false; // 플레이어의 사망 상태를 추적할 변수
-    // ---
-
+    private PlayerHealth playerHealth;
+    private bool isPlayerDead = false; // 이 변수를 사용하여 사망 상태를 추적합니다.
     private bool isChargingOxygen = false;
 
-    void Awake()
+    private void OnEnable()
     {
-        Scene currentScene = SceneManager.GetActiveScene();
-        if (currentScene.name != "Stage3")
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    private void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        if (scene.name == "Stage3")
         {
+            this.enabled = true;
+            if (oxygenSlider != null)
+            {
+                oxygenSlider.gameObject.SetActive(true);
+            }
+            currentOxygen = maxOxygen;
+            isPlayerDead = false; // Stage3에 진입할 때마다 사망 상태 초기화
+        }
+        else
+        {
+            this.enabled = false;
             if (oxygenSlider != null)
             {
                 oxygenSlider.gameObject.SetActive(false);
             }
-            this.enabled = false;
         }
     }
 
     void Start()
     {
         currentOxygen = maxOxygen;
-        // 게임이 시작될 때 PlayerHealth 컴포넌트를 미리 찾아 저장해둡니다.
         playerHealth = GetComponent<PlayerHealth>();
+        OnSceneLoaded(SceneManager.GetActiveScene(), LoadSceneMode.Single);
     }
 
     void Update()
     {
-        // 플레이어가 이미 죽었다면 더 이상 산소 로직을 실행하지 않습니다.
+        // --- ▼▼▼▼▼ 1번 수정 부분 ▼▼▼▼▼ ---
+        // playerHealth.isDead 대신, 이 스크립트 내부의 isPlayerDead 변수를 확인합니다.
         if (isPlayerDead) return;
+        // --- ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ ---
 
         if (isChargingOxygen)
         {
@@ -61,18 +79,18 @@ public class PlayerOxygen : MonoBehaviour
             oxygenSlider.value = currentOxygen / maxOxygen;
         }
 
-        // ▼▼▼▼▼ 핵심 수정 부분 ▼▼▼▼▼
         // 산소가 0 이하로 떨어졌는지 확인
         if (currentOxygen <= 0)
         {
-            // PlayerHealth 컴포넌트가 있고, 아직 죽지 않았다면 Die() 함수를 호출
-            if (playerHealth != null)
+            // --- ▼▼▼▼▼ 2번 수정 부분 ▼▼▼▼▼ ---
+            // playerHealth.isDead 대신, isPlayerDead 변수로 중복 호출을 방지합니다.
+            if (playerHealth != null && !isPlayerDead)
             {
                 playerHealth.Die(); // PlayerHealth의 Die() 함수를 호출
-                isPlayerDead = true; // 사망 신호를 보냈으므로, 다시 호출하지 않도록 상태 변경
+                isPlayerDead = true; // 사망 신호를 보냈으므로, 이 스크립트의 상태를 '사망'으로 변경
             }
+            // --- ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ ---
         }
-        // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
     }
 
     public void StartCharging()

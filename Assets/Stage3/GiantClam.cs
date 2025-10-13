@@ -5,76 +5,49 @@ public class GiantClam : MonoBehaviour
     [Header("설정")]
     [SerializeField] private int requiredPearls = 3;
     [SerializeField] private GameObject portalToActivate;
-    [SerializeField] private GameObject interactionPrompt;
 
     [Header("오브젝트 설정")]
-    [SerializeField] private GameObject closedClamObject; // 닫힌 상태의 자식 오브젝트
-    [SerializeField] private GameObject openClamObject;   // 열린 상태의 자식 오브젝트
+    [SerializeField] private GameObject closedClamObject;
+    [SerializeField] private GameObject openClamObject;
 
-    private bool playerIsNear = false;
-    private bool isOpen = false;
+    private bool isOpen = false; // 조개가 열렸는지 확인하는 스위치
 
     void Start()
     {
-        // 시작할 때, 닫힌 조개는 켜고 열린 조개는 끈 상태로 만듭니다.
+        // 시작할 때의 초기 상태 설정
         if (closedClamObject != null) closedClamObject.SetActive(true);
         if (openClamObject != null) openClamObject.SetActive(false);
-
         if (portalToActivate != null) portalToActivate.SetActive(false);
-        if (interactionPrompt != null) interactionPrompt.SetActive(false);
     }
 
     void Update()
     {
-        if (playerIsNear && Input.GetKeyDown(KeyCode.E) && !isOpen)
+        // 아직 조개가 열리지 않았을 때만 확인
+        if (!isOpen)
         {
-            if (PearlDisplayUI.instance.UsePearls(requiredPearls))
+            // PearlDisplayUI에 현재 진주 개수를 물어봄
+            if (PearlDisplayUI.instance.GetCurrentPearls() >= requiredPearls)
             {
+                // 진주 개수가 충분하면 즉시 Open() 함수를 호출
                 Open();
-            }
-            else
-            {
-                Debug.Log("진주가 부족하여 조개를 열 수 없습니다.");
             }
         }
     }
 
     private void Open()
     {
-        isOpen = true;
-        Debug.Log("대왕조개가 열립니다!");
+        isOpen = true; // 스위치를 켜서 Update 함수가 더 이상 실행되지 않도록 함
+        Debug.Log("대왕조개가 자동으로 열립니다!");
 
-        if (interactionPrompt != null) interactionPrompt.SetActive(false);
-
-        // --- 변경된 부분: 닫힌 오브젝트를 끄고, 열린 오브젝트를 켭니다. ---
+        // 닫힌 조개 오브젝트를 끄고, 열린 조개 오브젝트를 켭니다.
         if (closedClamObject != null) closedClamObject.SetActive(false);
         if (openClamObject != null) openClamObject.SetActive(true);
-        // --------------------------------------------------------
 
+        // 포탈을 활성화합니다.
         if (portalToActivate != null)
         {
             portalToActivate.SetActive(true);
             Debug.Log("포탈이 활성화되었습니다!");
-        }
-
-        GetComponent<Collider2D>().enabled = false;
-    }
-
-    private void OnTriggerEnter2D(Collider2D other)
-    {
-        if (other.CompareTag("Player") && !isOpen)
-        {
-            playerIsNear = true;
-            if (interactionPrompt != null) interactionPrompt.SetActive(true);
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            playerIsNear = false;
-            if (interactionPrompt != null) interactionPrompt.SetActive(false);
         }
     }
 }

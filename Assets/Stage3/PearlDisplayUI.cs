@@ -12,6 +12,7 @@ public class PearlDisplayUI : MonoBehaviour
     [Header("ตฅภฬลอ")]
     [SerializeField] private int maxPearls = 3;
     private int currentPearls = 0;
+    public int GetCurrentPearls() { return currentPearls; }
 
     void Awake()
     {
