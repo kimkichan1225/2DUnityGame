@@ -4352,7 +4352,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsterPrefab: {fileID: 6457116287576331260, guid: 9e706f34a205f6f459f9165d2ff2036f, type: 3}
-  maxMonsters: 3
+  maxMonsters: 2
   spawnInterval: 8
   spawnYPosition: -8.25
   spawnXRangeMin: 60
@@ -9300,7 +9300,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsterPrefab: {fileID: 6457116287576331260, guid: 9e706f34a205f6f459f9165d2ff2036f, type: 3}
-  maxMonsters: 5
+  maxMonsters: 3
   spawnInterval: 8
   spawnYPosition: -7.6
   spawnXRangeMin: 36
@@ -11436,7 +11436,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsterPrefab: {fileID: 6457116287576331260, guid: 9e706f34a205f6f459f9165d2ff2036f, type: 3}
-  maxMonsters: 3
+  maxMonsters: 2
   spawnInterval: 8
   spawnYPosition: -10.44
   spawnXRangeMin: 70
@@ -19016,7 +19016,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsterPrefab: {fileID: 8664533459467921685, guid: 5e13b9b3d13c77c4797b03870c71c280, type: 3}
-  maxMonsters: 3
+  maxMonsters: 2
   spawnInterval: 8
   spawnYPosition: -22
   spawnXRangeMin: 62
@@ -19553,7 +19553,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsterPrefab: {fileID: 8664533459467921685, guid: 5e13b9b3d13c77c4797b03870c71c280, type: 3}
-  maxMonsters: 5
+  maxMonsters: 4
   spawnInterval: 8
   spawnYPosition: -13.2
   spawnXRangeMin: -8
@@ -27095,7 +27095,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsterPrefab: {fileID: 6457116287576331260, guid: 9e706f34a205f6f459f9165d2ff2036f, type: 3}
-  maxMonsters: 2
+  maxMonsters: 3
   spawnInterval: 8
   spawnYPosition: -22
   spawnXRangeMin: 62
@@ -28515,7 +28515,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   monsterPrefab: {fileID: 6457116287576331260, guid: 9e706f34a205f6f459f9165d2ff2036f, type: 3}
-  maxMonsters: 3
+  maxMonsters: 2
   spawnInterval: 8
   spawnYPosition: -3.45
   spawnXRangeMin: 23

@@ -2580,7 +2580,7 @@ MonoBehaviour:
   warningSign: {fileID: 5786239532541151591}
   explosionEffect: {fileID: 524294627043653222}
   damageCollider: {fileID: 0}
-  warningDuration: 2
+  warningDuration: 0.5
   activeDuration: 1
   cooldownDuration: 3
   penaltyAmount: 2
