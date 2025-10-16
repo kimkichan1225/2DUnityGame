@@ -85,6 +85,12 @@ public class BattleController : MonoBehaviour
             player.InitializeFromPlayerScripts();
         }
         
+        if (boss != null && boss.healthBarUIParent != null)
+        {
+            boss.healthBarUIParent.SetActive(true);
+            boss.UpdateHealthUI();
+        }
+        
         player.SortDeckByCost();
         boss.SortDeckByCost();
         
@@ -204,13 +210,9 @@ public class BattleController : MonoBehaviour
             
             yield return new WaitForSeconds(1.5f);
 
-            // ★★★ 여기가 수정된 부분입니다 ★★★
-            // 현재 합(Clash)으로 인해 플레이어나 보스가 사망했는지 확인합니다.
             if (player.currentHp <= 0 || boss.currentHp <= 0)
             {
-                Debug.Log("사망자가 발생하여 남은 합을 중단합니다.");
-                // for 루프를 즉시 빠져나갑니다.
-                break; 
+                break;
             }
         }
 
@@ -316,6 +318,11 @@ public class BattleController : MonoBehaviour
     private IEnumerator VictorySequence()
     {
         Debug.Log("보스 처치! 승리했습니다!");
+
+        if (boss != null && boss.healthBarUIParent != null)
+        {
+            boss.healthBarUIParent.SetActive(false);
+        }
 
         yield return new WaitForSeconds(1.0f); 
 
