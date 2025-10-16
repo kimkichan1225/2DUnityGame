@@ -28,6 +28,8 @@ public class MinigameManager : MonoBehaviour
 
     private int finalTapCount = 0;
 
+    private PlayerController playerController;
+
     void Start()
     {
         dialoguePanel.SetActive(false);
@@ -37,6 +39,7 @@ public class MinigameManager : MonoBehaviour
 
     public void StartEventSequence()
     {
+        playerController = FindObjectOfType<PlayerController>();
         StartCoroutine(FullSequenceCoroutine());
     }
 
@@ -63,6 +66,10 @@ public class MinigameManager : MonoBehaviour
     private IEnumerator ShowDialogue(string[] dialogueLines)
     {
         dialoguePanel.SetActive(true);
+        if (playerController != null)
+        {
+            playerController.canMove = false;
+        }
         foreach (var line in dialogueLines)
         {
             dialogueText.text = line;
@@ -100,9 +107,9 @@ public class MinigameManager : MonoBehaviour
         if (LifeGameManager.Instance != null)
         {
             float buffValue = LifeGameManager.Instance.regenBuffValue;
-            if (buffValue >= 1.0f) rewardMessage = "생명의 넘치는 힘이 느껴진다!\n[치유] 버프 획득(강)(보스전에서 발동)";
-            else if (buffValue >= 0.5f) rewardMessage = "고목의 눈물을 얻었다!\n[치유] 버프 획득(약)(보스전에서 발동)";
-            else if (buffValue > 0f) rewardMessage = "생명의 기운을 희미하게나마 느꼈다.";
+            if (buffValue >= 1.0f) rewardMessage = "    I can feel the full power of life!\n    [Heal] (Strong)";
+            else if (buffValue >= 0.5f) rewardMessage = "    I got the tears of an old tree!\n    [Heal] (Weak)";
+            else if (buffValue > 0f) rewardMessage = "    I felt a faint sense of life.\r\n\r\n";
         }
 
         rewardText.text = rewardMessage;
@@ -114,6 +121,10 @@ public class MinigameManager : MonoBehaviour
         if (LifeGameManager.Instance != null && !string.IsNullOrEmpty(LifeGameManager.Instance.sceneNameBeforePortal))
         {
             SceneManager.LoadScene(LifeGameManager.Instance.sceneNameBeforePortal);
+        }
+        if (playerController != null)
+        {
+            playerController.canMove = true;
         }
     }
 }
