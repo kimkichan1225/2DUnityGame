@@ -161,7 +161,7 @@ public class ShopPedestal : MonoBehaviour
                         if (canAfford)
                         {
                             interactionText.text = "Press W";
-                            interactionText.color = Color.white;
+                            interactionText.color = Color.green;
                         }
                         else
                         {
