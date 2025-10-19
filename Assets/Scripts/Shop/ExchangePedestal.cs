@@ -128,7 +128,7 @@ public class ExchangePedestal : MonoBehaviour
         if (rateText != null)
         {
             rateText.text = $"Exchange\n{xpPerExchange}XP={goldPerExchange}G";
-            rateText.color = Color.black;
+            rateText.color = Color.green;
         }
     }
 

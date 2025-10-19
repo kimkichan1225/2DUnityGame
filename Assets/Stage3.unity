@@ -1230,7 +1230,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -900, y: 450}
+  m_AnchoredPosition: {x: -898, y: 227}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &320469386
@@ -2362,7 +2362,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -750, y: 450}
+  m_AnchoredPosition: {x: -731, y: 227}
   m_SizeDelta: {x: 200, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &652799050
@@ -9493,6 +9493,11 @@ Transform:
   - {fileID: 625086439}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1196656959 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2702869483234219603, guid: 8eea7740aa3fed14e811b14a11fb203d, type: 3}
+  m_PrefabInstance: {fileID: 8057454717117025241}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1309371120
 GameObject:
   m_ObjectHideFlags: 0
@@ -10757,7 +10762,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1d500bbeffa76e4d87b4a5dc7941322, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  monsterPrefab: {fileID: 2702869483234219603, guid: 8eea7740aa3fed14e811b14a11fb203d, type: 3}
+  monsterPrefab: {fileID: 1196656959}
   maxMonsters: 5
   spawnInterval: 8
   spawnYPosition: 6
@@ -13290,6 +13295,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2336442248383010111, guid: 8eea7740aa3fed14e811b14a11fb203d, type: 3}
+      propertyPath: attackOffset.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2539080383719388114, guid: 8eea7740aa3fed14e811b14a11fb203d, type: 3}
       propertyPath: m_SortingOrder
       value: 2
@@ -13302,6 +13311,10 @@ PrefabInstance:
       propertyPath: m_IsTrigger
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4359051043128122740, guid: 8eea7740aa3fed14e811b14a11fb203d, type: 3}
+      propertyPath: hitEffectPrefab
+      value: 
+      objectReference: {fileID: 4688160674155996200, guid: 30045067a5c548042951bed16d05341b, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
