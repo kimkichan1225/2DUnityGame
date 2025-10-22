@@ -683,12 +683,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 58b1ab03c73648f4da82435fe9ac2680, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  dialogueDelay: 0.5
+  deathDialogue: []
+  targetStatue: {fileID: 0}
   maxHealth: 80
   defense: 10
   xpValue: 10
   healthBar: {fileID: 8664533459344636292}
   damageTextPrefab: {fileID: 7576095758979449151, guid: 0a244c659ebae43479b80c1af3134bab, type: 3}
   damageTextOffset: {x: 0, y: 0.5, z: 5}
+  hitEffectPrefab: {fileID: 4688160674155996200, guid: 30045067a5c548042951bed16d05341b, type: 3}
+  hitEffectDuration: 0.3
+  randomRangeX: {x: -0.5, y: 0.5}
+  randomRangeY: {x: -0.5, y: 0.5}
+  hurtAnimationProbability: 0.3
+  flashDuration: 0.1
   deathSound: {fileID: 8300000, guid: c9714660cfc35d6478be74715399759c, type: 3}
   hitSound: {fileID: 8300000, guid: 84ddfa36f41743b499bcdce5b2de8c59, type: 3}
   deathAnimationDuration: 0.6
@@ -709,8 +718,10 @@ MonoBehaviour:
   maxMoveDuration: 3
   minPauseDuration: 0.5
   maxPauseDuration: 2
-  detectionRadius: 5
-  attackRadius: 2.5
+  detectionSize: {x: 6, y: 4}
+  detectionOffset: {x: 0, y: 0.8}
+  attackSize: {x: 2.5, y: 2}
+  attackOffset: {x: 0, y: 0}
   playerLayer:
     serializedVersion: 2
     m_Bits: 8
@@ -743,6 +754,35 @@ MonoBehaviour:
   goldDropRange: 0.2
   minCoinCount: 3
   maxCoinCount: 5
+  itemDropList:
+  - itemPrefab: {fileID: 4588468919509396396, guid: 0eab7035af9340641946c371ca2345c1, type: 3}
+    dropChance: 10
+    minDropCount: 1
+    maxDropCount: 1
+  - itemPrefab: {fileID: 2657423303460945496, guid: cca5cb53a80350445873d1f293c8395f, type: 3}
+    dropChance: 2
+    minDropCount: 1
+    maxDropCount: 1
+  - itemPrefab: {fileID: 4671173666858946743, guid: 98a6b0c5304c94e4c8b40871a1761aa2, type: 3}
+    dropChance: 0.5
+    minDropCount: 1
+    maxDropCount: 1
+  - itemPrefab: {fileID: 5957329853734043331, guid: e80a50e0b5c837d48a95d82370b99e47, type: 3}
+    dropChance: 5
+    minDropCount: 1
+    maxDropCount: 1
+  - itemPrefab: {fileID: 9055460090049634080, guid: eaf9204d8717dcd4dbb6c5fda467a680, type: 3}
+    dropChance: 5
+    minDropCount: 1
+    maxDropCount: 1
+  - itemPrefab: {fileID: 4988119175977235638, guid: daabd7ff204e60745a18c39caf3570f1, type: 3}
+    dropChance: 5
+    minDropCount: 1
+    maxDropCount: 1
+  - itemPrefab: {fileID: 1016689150354417925, guid: a56484ce7b7f25643b56eb86b25db73b, type: 3}
+    dropChance: 5
+    minDropCount: 1
+    maxDropCount: 1
   dropForce: 5
 --- !u!1 &8664533459541306059
 GameObject:

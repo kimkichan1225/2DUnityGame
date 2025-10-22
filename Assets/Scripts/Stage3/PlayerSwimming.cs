@@ -4,55 +4,65 @@ using UnityEngine;
 public class PlayerSwimming : MonoBehaviour
 {
     [Header("헤엄 설정")]
-    public float swimSpeed = 4f;     // 좌우 이동 속도
-    public float ascendForce = 5.5f;  // K키를 눌렀을 때 솟구치는 힘
-    public float waterDrag = 1.5f;     // 물의 저항
-    public float gravityScaleInWater = 1f; // 물 속에서의 중력
+    public float swimSpeed = 4f;
+    public float ascendForce = 5.5f;
+    public float waterDrag = 1.5f;
+    public float gravityScaleInWater = 1f;
 
     [Header("벽 감지 설정")]
     public Transform wallCheck;
     public float wallCheckRadius = 0.1f;
     public LayerMask wallLayer;
 
+    // --- ▼▼▼▼▼ 수정된 부분 (점프 카운트 관련) ▼▼▼▼▼ ---
+    [Header("상승 제한")]
+    [SerializeField] private int maxAscendCount = 5; // 물 속에서 연속 상승 가능한 횟수 (5회로 변경)
+    private int currentAscendCount = 0;
+    // --- ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ ---
+
+    // --- ▼▼▼▼▼ 추가된 부분 (땅 감지 관련) ▼▼▼▼▼ ---
+    [Header("땅 감지 설정")]
+    [SerializeField] private Transform groundCheck; // 플레이어 발밑 위치 (빈 오브젝트 연결)
+    [SerializeField] private float groundCheckRadius = 0.2f; // 땅 감지 범위
+    [SerializeField] private LayerMask groundLayer; // 땅으로 인식할 레이어
+    private bool isGrounded = false; // 현재 땅에 닿아있는지 여부
+    // --- ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ ---
+
     private Rigidbody2D rb;
     private float originalGravityScale;
-    private float moveInput; // 수평 입력 값 저장
+    private float moveInput;
 
     private PhysicsMaterial2D noFrictionMaterial;
     private PhysicsMaterial2D originalMaterial;
+    private PlayerController playerController;
 
     void Awake()
     {
         rb = GetComponent<Rigidbody2D>();
+        playerController = GetComponent<PlayerController>();
 
-        // 이 스크립트가 시작될 때, 플레이어의 자식 중 "WallCheck"를 찾아 자동으로 연결합니다.
-        if (wallCheck == null)
-        {
-            wallCheck = transform.Find("WallCheck");
-        }
+        if (wallCheck == null) wallCheck = transform.Find("WallCheck");
+        // --- ▼▼▼▼▼ 추가된 부분 (GroundCheck 자동 찾기) ▼▼▼▼▼ ---
+        if (groundCheck == null) groundCheck = transform.Find("GroundCheck");
+        // --- ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ ---
 
-        // 마찰력 없는 물리 재질 생성
         noFrictionMaterial = new PhysicsMaterial2D("NoFriction_Swim");
         noFrictionMaterial.friction = 0f;
         noFrictionMaterial.bounciness = 0f;
     }
 
-    // 이 스크립트가 활성화될 때 (Stage3Manager가 켜주는 시점)
     void OnEnable()
     {
-        // 원래 물리 값을 저장하고, 물 속 값으로 변경
         originalGravityScale = rb.gravityScale;
         rb.gravityScale = gravityScaleInWater;
         rb.linearDamping = waterDrag;
-
         originalMaterial = rb.sharedMaterial;
         rb.sharedMaterial = noFrictionMaterial;
+        currentAscendCount = 0; // 활성화 시 카운트 초기화
     }
 
-    // 이 스크립트가 비활성화될 때 (다른 스테이지로 갈 때)
     void OnDisable()
     {
-        // 원래 물리 값으로 복구
         rb.gravityScale = originalGravityScale;
         rb.linearDamping = 0f;
         rb.sharedMaterial = originalMaterial;
@@ -60,21 +70,29 @@ public class PlayerSwimming : MonoBehaviour
 
     void Update()
     {
-        // 좌우 이동 입력을 받습니다.
         moveInput = Input.GetAxisRaw("Horizontal");
 
-        // ★★★ 기존 로직 유지: 'K'키로 상승 ★★★
-        // GetKeyDown은 한 번 눌렀을 때를 감지합니다.
-        if (Input.GetKeyDown(KeyCode.K))
+        // 'K'키를 누르고, 아직 최대 상승 횟수에 도달하지 않았을 때
+        if (Input.GetKeyDown(KeyCode.K) && currentAscendCount < maxAscendCount)
         {
-            // 위쪽으로 순간적인 힘(Impulse)을 가해 솟구치게 합니다.
+            currentAscendCount++;
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.8f);
             rb.AddForce(Vector2.up * ascendForce, ForceMode2D.Impulse);
         }
     }
 
     void FixedUpdate()
     {
-        // 벽 감지
+        if (playerController != null && playerController.IsDashing())
+        {
+            return;
+        }
+
+        // --- ▼▼▼▼▼ 추가된 부분 (땅 감지 로직) ▼▼▼▼▼ ---
+        // 매 프레임 땅에 닿아있는지 확인
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, groundLayer);
+        // --- ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ ---
+
         bool isTouchingWall = false;
         if (wallCheck != null)
         {
@@ -83,14 +101,31 @@ public class PlayerSwimming : MonoBehaviour
 
         float currentMoveSpeed = swimSpeed;
 
-        // 벽에 닿았고, 그 방향으로 계속 이동하려고 하면 수평 이동 속도를 0으로 만듦
         if (isTouchingWall && ((moveInput > 0 && transform.localScale.x > 0) || (moveInput < 0 && transform.localScale.x < 0)))
         {
             currentMoveSpeed = 0;
         }
 
-        // ★★★ 기존 로직 유지: 반응성 좋은 좌우 이동 ★★★
-        // AddForce 대신, velocity를 직접 제어하여 즉각적인 움직임을 만듭니다.
         rb.linearVelocity = new Vector2(moveInput * currentMoveSpeed, rb.linearVelocity.y);
+
+        // --- ▼▼▼▼▼ 수정된 부분 (상승 횟수 초기화 조건 변경) ▼▼▼▼▼ ---
+        // 플레이어가 땅(Ground)에 착지하면 상승 횟수를 초기화합니다.
+        if (isGrounded)
+        {
+            currentAscendCount = 0;
+        }
+        // --- ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ ---
     }
+
+    // --- ▼▼▼▼▼ 추가된 부분 (땅 감지 범위 시각화) ▼▼▼▼▼ ---
+    // Scene 뷰에서 땅 감지 범위를 원으로 표시 (디버깅용)
+    private void OnDrawGizmosSelected()
+    {
+        if (groundCheck != null)
+        {
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawWireSphere(groundCheck.position, groundCheckRadius);
+        }
+    }
+    // --- ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ ---
 }
