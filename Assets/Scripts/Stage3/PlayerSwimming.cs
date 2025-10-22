@@ -76,7 +76,7 @@ public class PlayerSwimming : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.K) && currentAscendCount < maxAscendCount)
         {
             currentAscendCount++;
-            rb.velocity = new Vector2(rb.velocity.x, rb.velocity.y * 0.8f);
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, rb.linearVelocity.y * 0.8f);
             rb.AddForce(Vector2.up * ascendForce, ForceMode2D.Impulse);
         }
     }
@@ -106,7 +106,7 @@ public class PlayerSwimming : MonoBehaviour
             currentMoveSpeed = 0;
         }
 
-        rb.velocity = new Vector2(moveInput * currentMoveSpeed, rb.velocity.y);
+        rb.linearVelocity = new Vector2(moveInput * currentMoveSpeed, rb.linearVelocity.y);
 
         // --- ▼▼▼▼▼ 수정된 부분 (상승 횟수 초기화 조건 변경) ▼▼▼▼▼ ---
         // 플레이어가 땅(Ground)에 착지하면 상승 횟수를 초기화합니다.
