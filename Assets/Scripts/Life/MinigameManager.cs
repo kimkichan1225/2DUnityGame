@@ -119,10 +119,22 @@ public class MinigameManager : MonoBehaviour
 
     public void OnClickReturnButton()
     {
+        // 1. 멈췄던 시간을 되돌립니다.
+        Time.timeScale = 1f;
+
+        // 2. GameManager 대신 LifeGameManager의 정보를 사용합니다.
         if (LifeGameManager.Instance != null && !string.IsNullOrEmpty(LifeGameManager.Instance.sceneNameBeforePortal))
         {
             SceneManager.LoadScene(LifeGameManager.Instance.sceneNameBeforePortal);
         }
+        else
+        {
+            // 안전장치
+            Debug.LogWarning("돌아갈 씬 정보가 LifeGameManager에 없습니다! 기본 씬('Stage1')으로 이동합니다.");
+            SceneManager.LoadScene("Stage1");
+        }
+
+        // (기존 PlayerController 관련 코드는 그대로 유지)
         if (playerController != null)
         {
             playerController.canMove = true;

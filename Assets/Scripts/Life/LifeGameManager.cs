@@ -45,6 +45,11 @@ public class LifeGameManager : MonoBehaviour
     {
         yield return null;
 
+        // ★★★ 이 부분을 추가하세요 ★★★
+        // 혹시라도 시간이 멈춰있을 경우를 대비해, 씬 복구 시 시간을 무조건 1로 되돌립니다.
+        Time.timeScale = 1f;
+        // --- 여기까지 ---
+
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
         {

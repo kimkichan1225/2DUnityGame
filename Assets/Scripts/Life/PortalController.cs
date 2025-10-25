@@ -129,42 +129,21 @@ public class PortalController : MonoBehaviour
                 usedPortalIDs.Add(portalID);
             }
 
-            // --- PortalReturnManager�� ����� �� �ֵ��� PortalReturnData�� ������ �����մϴ� ---
-            if (returnSpawnPoint != null)
+            // --- 수정된 부분 ---
+            // 1. PlayerReturnData 대신 LifeGameManager에 정보를 저장합니다.
+            if (returnSpawnPoint != null && LifeGameManager.Instance != null)
             {
-                PortalReturnData.hasReturnInfo = true;
-                PortalReturnData.returnPosition = returnSpawnPoint.position;
-                PortalReturnData.previousSceneName = SceneManager.GetActiveScene().name;
+                LifeGameManager.Instance.playerPositionBeforePortal = returnSpawnPoint.position;
+                LifeGameManager.Instance.sceneNameBeforePortal = SceneManager.GetActiveScene().name;
             }
             else
             {
-                Debug.LogError("Return Spawn Point�� PortalController�� ������� �ʾҽ��ϴ�! Inspector�� Ȯ�����ּ���.", this.gameObject);
+                Debug.LogError("Return Spawn Point가 연결되지 않았거나 LifeGameManager가 씬에 없습니다!", this.gameObject);
                 return;
             }
 
-            // 2. LifeGameManager�� ���� ������ �����մϴ� (���� ��� ����).
-            if (LifeGameManager.Instance != null)
-            {
-                // �ڡڡ� �ٽ� ������ �ڡڡ�
-                // �÷��̾��� ���� ��ġ ���, ������ ReturnSpawnPoint�� ��ġ�� �����մϴ�.
-                if (returnSpawnPoint != null)
-                {
-                    LifeGameManager.Instance.playerPositionBeforePortal = returnSpawnPoint.position;
-                }
-                else
-                {
-                    // ������ġ: ���� returnSpawnPoint�� ���� �ȵ����� �׳� ���� �÷��̾� ��ġ ����
-                    GameObject player = GameObject.FindGameObjectWithTag("Player");
-                    if (player != null)
-                    {
-                        LifeGameManager.Instance.playerPositionBeforePortal = player.transform.position;
-                    }
-                }
+            
 
-                LifeGameManager.Instance.sceneNameBeforePortal = SceneManager.GetActiveScene().name;
-            }
-
-            // 3. ���� �̵��մϴ� (���� ��� ����).
             SceneManager.LoadScene(sceneToLoad);
         }
         Destroy(gameObject);
