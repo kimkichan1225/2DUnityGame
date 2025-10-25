@@ -207,19 +207,25 @@ public class BattleController : MonoBehaviour
         yield return null;
     }
 
+    // ★★★ 여기가 수정된 부분입니다 ★★★
+    // 캐릭터가 넉백될 때, 두 개의 ClashPosition을 모두 함께 이동시킵니다.
     public void ApplyClashPointKnockback(CharacterStats character, float distance)
     {
         CharacterVisuals visuals = character.GetComponent<CharacterVisuals>();
         if (visuals == null || visuals.homeTransform == null) return;
 
+        // 넉백 방향과 거리를 계산
         Vector3 knockbackDirection = (visuals.homeTransform.position - character.transform.position).normalized;
-        if (character == player)
+        Vector3 knockbackVector = knockbackDirection * distance;
+
+        // 플레이어와 보스의 ClashPosition을 둘 다 똑같은 양만큼 이동
+        if (playerClashPosition != null)
         {
-            playerClashPosition.position += knockbackDirection * distance;
+            playerClashPosition.position += knockbackVector;
         }
-        else if (character == boss)
+        if (bossClashPosition != null)
         {
-            bossClashPosition.position += knockbackDirection * distance;
+            bossClashPosition.position += knockbackVector;
         }
     }
     
