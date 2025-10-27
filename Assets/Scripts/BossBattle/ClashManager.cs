@@ -10,7 +10,7 @@ public class ClashManager
         int diceIndexA = 0;
         int diceIndexB = 0;
 
-        // --- 1단계: 합(Clash) 진행 (while 루프 복구) ---
+        // --- 1단계: 합(Clash) 진행 ---
         while (diceIndexA < pageA.diceList.Count && diceIndexB < pageB.diceList.Count)
         {
             CombatDice diceA = pageA.diceList[diceIndexA];
@@ -18,14 +18,15 @@ public class ClashManager
 
             Debug.Log($"--- [ {diceIndexA + 1}번째 주사위 합 ] ---");
 
+            // 규칙: 수비 주사위끼리 합하면 무조건 무승부
             if (diceA.type == DiceType.Defense && diceB.type == DiceType.Defense)
             {
                 Debug.Log("<b>결과:</b> 수비 주사위끼리 맞붙어 <color=grey><b>무승부</b></color> 처리됩니다.");
                 diceIndexA++;
                 diceIndexB++;
-                continue; 
+                continue; // 다음 주사위 대결로 넘어감
             }
-            
+
             int rollA = diceA.Roll();
             int rollB = diceB.Roll();
 
@@ -36,74 +37,74 @@ public class ClashManager
             {
                 logMessage += $"<b>결과:</b> <color=cyan><b>{characterA.characterName} 승리!</b></color>";
                 Debug.Log(logMessage);
-                
+
                 switch (diceA.type)
                 {
-                    case DiceType.Attack:
+                    case DiceType.Attack: // A가 공격으로 승리
                         int grossDamage = (characterA.attackPower + rollA) - characterB.defensePower;
-                        if (diceB.type == DiceType.Defense)
+                        if (diceB.type == DiceType.Defense) // B가 수비로 패배 (피해 이중 경감)
                         {
                             int finalDamage = Mathf.Max(1, grossDamage - rollB);
                             Debug.Log($"{characterB.characterName}의 방어력({characterB.defensePower})과 수비 주사위({rollB})로 피해 경감! 최종 피해: {finalDamage}");
                             characterB.TakeDamage(finalDamage);
                         }
-                        else
+                        else // B가 공격으로 패배
                         {
                             int finalDamage = Mathf.Max(1, grossDamage);
                             Debug.Log($"{characterB.characterName}의 방어력({characterB.defensePower})으로 피해 경감! 최종 피해: {finalDamage}");
                             characterB.TakeDamage(finalDamage);
                         }
                         break;
-                    
-                    case DiceType.Defense:
+
+                    case DiceType.Defense: // A가 수비로 승리 (반격)
                         int counterDamage = rollA - rollB;
                         Debug.Log($"{characterA.characterName}의 수비 성공! {characterB.characterName}에게 {counterDamage}의 반격 피해를 줍니다.");
                         characterB.TakeDamage(counterDamage);
                         break;
                 }
-                diceIndexB++; // 진 쪽(B)의 주사위만 파괴
             }
             else if (rollB > rollA) // B가 승리
             {
                 logMessage += $"<b>결과:</b> <color=orange><b>{characterB.characterName} 승리!</b></color>";
                 Debug.Log(logMessage);
-                
+
                 switch (diceB.type)
                 {
-                    case DiceType.Attack:
+                    case DiceType.Attack: // B가 공격으로 승리
                         int grossDamage = (characterB.attackPower + rollB) - characterA.defensePower;
-                        if (diceA.type == DiceType.Defense)
+                        if (diceA.type == DiceType.Defense) // A가 수비로 패배 (피해 이중 경감)
                         {
                             int finalDamage = Mathf.Max(1, grossDamage - rollA);
                             Debug.Log($"{characterA.characterName}의 방어력({characterA.defensePower})과 수비 주사위({rollA})로 피해 경감! 최종 피해: {finalDamage}");
                             characterA.TakeDamage(finalDamage);
                         }
-                        else
+                        else // A가 공격으로 패배
                         {
                             int finalDamage = Mathf.Max(1, grossDamage);
                             Debug.Log($"{characterA.characterName}의 방어력({characterA.defensePower})으로 피해 경감! 최종 피해: {finalDamage}");
                             characterA.TakeDamage(finalDamage);
                         }
                         break;
-                    
-                    case DiceType.Defense:
+
+                    case DiceType.Defense: // B가 수비로 승리 (반격)
                         int counterDamage = rollB - rollA;
                         Debug.Log($"{characterB.characterName}의 수비 성공! {characterA.characterName}에게 {counterDamage}의 반격 피해를 줍니다.");
                         characterA.TakeDamage(counterDamage);
                         break;
                 }
-                diceIndexA++; // 진 쪽(A)의 주사위만 파괴
             }
             else // 무승부
             {
                 logMessage += "<b>결과:</b> <color=grey><b>무승부!</b></color>";
                 Debug.Log(logMessage);
-                diceIndexA++;
-                diceIndexB++;
             }
+
+            // ★★★ 규칙: 승패와 상관없이, 합을 한 번 진행한 주사위는 모두 사용된 것으로 처리 ★★★
+            diceIndexA++;
+            diceIndexB++;
         }
 
-        // --- 2단계: 일방 공격 진행 (로직 복구) ---
+        // --- 2단계: 일방 공격 진행 ---
         Debug.Log("--- 합 종료, 남은 주사위로 일방 공격 ---");
 
         while (diceIndexA < pageA.diceList.Count)
@@ -111,7 +112,7 @@ public class ClashManager
             CombatDice remainingDiceA = pageA.diceList[diceIndexA];
             int roll = remainingDiceA.Roll();
             Debug.Log($"{characterA.characterName}의 남은 <b>'{pageA.pageName}'</b> 카드의 {diceIndexA + 1}번째 주사위로 일방 공격! ({remainingDiceA.type}): {roll}");
-            
+
             if (remainingDiceA.type == DiceType.Attack)
             {
                 int finalDamage = Mathf.Max(1, (characterA.attackPower + roll) - characterB.defensePower);
@@ -135,7 +136,7 @@ public class ClashManager
             }
             diceIndexB++;
         }
-        
+
         Debug.Log("-------------------------------------");
     }
 }

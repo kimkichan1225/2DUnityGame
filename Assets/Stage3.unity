@@ -7081,7 +7081,7 @@ MonoBehaviour:
   monsterPrefab: {fileID: 2702869483234219603, guid: 8eea7740aa3fed14e811b14a11fb203d, type: 3}
   maxMonsters: 12
   spawnInterval: 8
-  spawnYPosition: 21
+  spawnYPosition: 20.5
   spawnXRangeMin: -93
   spawnXRangeMax: -55
 --- !u!1 &350783649
@@ -30401,7 +30401,7 @@ MonoBehaviour:
   monsterPrefab: {fileID: 2702869483234219603, guid: 8eea7740aa3fed14e811b14a11fb203d, type: 3}
   maxMonsters: 12
   spawnInterval: 10
-  spawnYPosition: -68.7
+  spawnYPosition: -69
   spawnXRangeMin: -45
   spawnXRangeMax: 0
 --- !u!1 &1621590631
@@ -38977,7 +38977,7 @@ MonoBehaviour:
   monsterPrefab: {fileID: 2702869483234219603, guid: 8eea7740aa3fed14e811b14a11fb203d, type: 3}
   maxMonsters: 12
   spawnInterval: 8
-  spawnYPosition: 15.8
+  spawnYPosition: 15.3
   spawnXRangeMin: -88
   spawnXRangeMax: -42
 --- !u!1 &2133546375

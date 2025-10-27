@@ -30,18 +30,16 @@ public class BattleController : MonoBehaviour
     [Header("카메라 컨트롤러")]
     public CameraController mainCameraController;
 
-    [Header("주사위 애니메이션")]
-    public DiceAnimationManager diceAnimationManager;
-
     [Header("승리 연출")]
     public TextMeshProUGUI victoryText;
     public string nextStageName = "Stage2";
-    
+
     [Header("넉백 설정")]
     public float knockbackPower = 0.1f;
 
-    private Vector3 originalPlayerClashPos;
-    private Vector3 originalBossClashPos;
+    // --- 비공개 변수들 ---
+    private Vector3 originalPlayerClashPos; // 초기 위치 저장용 변수
+    private Vector3 originalBossClashPos;   // 초기 위치 저장용 변수
     private int currentPage = 0;
     private const int cardsPerPage = 3;
     private bool isPlayerActionsConfirmed = false;
@@ -58,9 +56,10 @@ public class BattleController : MonoBehaviour
         previousButton.onClick.AddListener(ShowPreviousGroup);
         viewEnemyDeckButton.onClick.AddListener(ToggleDeckViewMode);
 
+        // 전투 시작 시, clashPosition의 초기 위치를 저장
         if (playerClashPosition != null) originalPlayerClashPos = playerClashPosition.position;
         if (bossClashPosition != null) originalBossClashPos = bossClashPosition.position;
-        
+
         StartCoroutine(SetupBattle());
     }
 
@@ -94,16 +93,16 @@ public class BattleController : MonoBehaviour
         {
             player.InitializeFromPlayerScripts();
         }
-        
+
         if (boss != null && boss.healthBarUIParent != null)
         {
             boss.healthBarUIParent.SetActive(true);
             boss.UpdateHealthUI();
         }
-        
+
         player.SortDeckByCost();
         boss.SortDeckByCost();
-        
+
         StartCoroutine(SetupNewTurn());
         yield return null;
     }
@@ -118,7 +117,7 @@ public class BattleController : MonoBehaviour
         {
             yield return StartCoroutine(mainCameraController.ZoomIn());
         }
-        
+
         int clashCount = playerActionQueueUI.Count;
         for (int i = 0; i < clashCount; i++)
         {
@@ -134,19 +133,10 @@ public class BattleController : MonoBehaviour
             CombatPage playerPage = playerActionQueueUI[i].assignedPage;
             CombatPage bossPage = bossActionQueue[i];
 
-            // 주사위 애니메이션과 함께 충돌 해결
-            if (diceAnimationManager != null)
-            {
-                diceAnimationManager.SetupDiceVisuals(playerPage, bossPage);
-                yield return StartCoroutine(diceAnimationManager.AnimateClashSequence(
-                    player, playerPage, boss, bossPage));
-            }
-            else
-            {
-                // 애니메이션 매니저가 없으면 기본 로직 사용 (폴백)
-                ClashManager.ResolveClash(player, playerPage, boss, bossPage);
-                yield return new WaitForSeconds(1.0f);
-            }
+            // ClashManager는 데미지 계산과 TakeDamage 호출만 담당 (넉백 로직은 CharacterStats가 처리)
+            ClashManager.ResolveClash(player, playerPage, boss, bossPage);
+
+            yield return new WaitForSeconds(1.0f); // 데미지 및 넉백 연출 기다리는 시간
 
             if (player.currentHp <= 0 || boss.currentHp <= 0)
             {
@@ -171,12 +161,12 @@ public class BattleController : MonoBehaviour
         }
 
         Debug.Log("======== 페이즈 종료 ========");
-        
-        foreach(var actionCardUI in playerActionQueueUI)
+
+        foreach (var actionCardUI in playerActionQueueUI)
         {
             player.SetCardCooldown(actionCardUI.assignedPage);
         }
-        foreach(var bossPage in bossActionQueue)
+        foreach (var bossPage in bossActionQueue)
         {
             boss.SetCardCooldown(bossPage);
         }
@@ -186,19 +176,21 @@ public class BattleController : MonoBehaviour
 
     IEnumerator SetupNewTurn()
     {
+        // 턴 시작 전에 이미 전투가 끝났는지 확인
         if (player.currentHp <= 0 || boss.currentHp <= 0)
         {
-            yield break;
+            yield break; // 승/패 연출이 진행 중이므로 새 턴 시작 안 함
         }
 
         Debug.Log("======== 새로운 턴 시작 ========");
 
+        // 매 턴이 시작될 때, clashPosition을 저장해둔 초기 위치로 리셋
         if (playerClashPosition != null) playerClashPosition.position = originalPlayerClashPos;
         if (bossClashPosition != null) bossClashPosition.position = originalBossClashPos;
-        
+
         foreach (var ui in playerActionQueueUI)
         {
-            if(ui != null) Destroy(ui.gameObject);
+            if (ui != null) Destroy(ui.gameObject);
         }
         playerActionQueueUI.Clear();
         bossActionQueue.Clear();
@@ -213,15 +205,14 @@ public class BattleController : MonoBehaviour
         previousButton.gameObject.SetActive(true);
         viewEnemyDeckButton.gameObject.SetActive(true);
         deckViewModeText.gameObject.SetActive(true);
-        
+
         isViewingBoss = false;
         currentPage = 0;
         DisplayCurrentGroupCards();
         yield return null;
     }
 
-    // ★★★ 여기가 수정된 부분입니다 ★★★
-    // 캐릭터가 넉백될 때, 두 개의 ClashPosition을 모두 함께 이동시킵니다.
+    // CharacterStats가 호출하여 clashPosition을 이동시키는 함수
     public void ApplyClashPointKnockback(CharacterStats character, float distance)
     {
         CharacterVisuals visuals = character.GetComponent<CharacterVisuals>();
@@ -241,7 +232,8 @@ public class BattleController : MonoBehaviour
             bossClashPosition.position += knockbackVector;
         }
     }
-    
+
+    // CharacterStats가 호출하여 승/패 연출을 시작하는 함수
     public void OnCharacterDefeated(CharacterStats defeatedCharacter)
     {
         if (defeatedCharacter == boss)
@@ -251,19 +243,29 @@ public class BattleController : MonoBehaviour
         else if (defeatedCharacter == player)
         {
             Debug.Log("플레이어가 패배했습니다...");
+            // (추후 여기에 패배 로직 추가)
         }
     }
 
     private IEnumerator VictorySequence()
     {
         Debug.Log("보스 처치! 승리했습니다!");
-        
+
         if (boss != null && boss.healthBarUIParent != null)
         {
             boss.healthBarUIParent.SetActive(false);
         }
 
-        yield return new WaitForSeconds(1.0f); 
+        yield return new WaitForSeconds(1.0f);
+
+        if (player != null && boss != null && boss.deck != null)
+        {
+            Debug.Log("보스의 덱 카드를 획득합니다...");
+            foreach (CombatPage card in boss.deck)
+            {
+                //player.AddCardToCollection(card);
+            }
+        }
 
         if (boss != null)
         {
@@ -281,10 +283,11 @@ public class BattleController : MonoBehaviour
         {
             BossGameManager.Instance.ChangeState(GameState.Exploration);
         }
-        
+
         SceneManager.LoadScene(nextStageName);
     }
-    
+
+    // (이하 카드 UI 관련 함수들은 이전 버전과 동일)
     public void ToggleDeckViewMode()
     {
         isViewingBoss = !isViewingBoss;
@@ -296,7 +299,7 @@ public class BattleController : MonoBehaviour
     {
         CharacterStats currentCharacter = isViewingBoss ? boss : player;
         deckViewModeText.text = isViewingBoss ? "Boss Deck" : "Player Deck";
-        
+
         foreach (Transform child in handPanel) Destroy(child.gameObject);
         displayedCardUIs.Clear();
 
@@ -356,11 +359,11 @@ public class BattleController : MonoBehaviour
         selectedCardUI.transform.SetParent(actionSlotsPanel);
         selectedCardUI.SetSelected(true);
         displayedCardUIs.Remove(selectedCardUI);
-        
+
         if (playerActionQueueUI.Count == 1) Debug.Log("카드를 선택했습니다. 스페이스바를 눌러 전투를 시작하세요.");
         foreach (var card in displayedCardUIs)
         {
-            if(card != null) card.UpdateState(player);
+            if (card != null) card.UpdateState(player);
         }
     }
 
