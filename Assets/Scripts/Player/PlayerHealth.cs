@@ -2,6 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
+using UnityEngine.SceneManagement;
 
 public class PlayerHealth : MonoBehaviour
 {
@@ -107,6 +108,8 @@ public class PlayerHealth : MonoBehaviour
         Debug.Log("Player has died.");
         animator.SetTrigger("isDead");
         onPlayerDeath?.Invoke();
+        Time.timeScale = 0f;
+        SceneManager.LoadScene("DeathScene");
     }
 
     public void AddPermanentHealth(int amount)
