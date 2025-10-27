@@ -136,9 +136,11 @@ public class DiceAnimationManager : MonoBehaviour
                     StartCoroutine(bossDiceVisuals[diceIndexB].AnimateLose());
                 }
 
-                // 데미지 처리
-                yield return StartCoroutine(ApplyDamageWithAnimation(
-                    playerStats, diceA, rollA, rollB, bossStats));
+                // 데미지 처리 (ClashManager와 동일한 로직)
+                yield return StartCoroutine(ApplyClashDamage(
+                    playerStats, diceA, rollA, bossStats, diceB, rollB));
+
+                diceIndexB++; // 진 쪽(B)의 주사위만 파괴
             }
             else if (rollB > rollA)
             {
@@ -151,9 +153,11 @@ public class DiceAnimationManager : MonoBehaviour
                     StartCoroutine(bossDiceVisuals[diceIndexB].AnimateWin());
                 }
 
-                // 데미지 처리
-                yield return StartCoroutine(ApplyDamageWithAnimation(
-                    bossStats, diceB, rollB, rollA, playerStats));
+                // 데미지 처리 (ClashManager와 동일한 로직)
+                yield return StartCoroutine(ApplyClashDamage(
+                    bossStats, diceB, rollB, playerStats, diceA, rollA));
+
+                diceIndexA++; // 진 쪽(A)의 주사위만 파괴
             }
             else
             {
@@ -165,12 +169,12 @@ public class DiceAnimationManager : MonoBehaviour
                     StartCoroutine(playerDiceVisuals[diceIndexA].AnimateDraw());
                     StartCoroutine(bossDiceVisuals[diceIndexB].AnimateDraw());
                 }
+
+                diceIndexA++;
+                diceIndexB++;
             }
 
             yield return new WaitForSeconds(delayAfterClash);
-
-            diceIndexA++;
-            diceIndexB++;
         }
 
         // 2단계: 일방 공격
@@ -232,48 +236,48 @@ public class DiceAnimationManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 데미지 적용 애니메이션
+    /// 합(Clash) 데미지 적용 - ClashManager와 동일한 로직
     /// </summary>
-    private IEnumerator ApplyDamageWithAnimation(
-        CharacterStats attacker, CombatDice attackerDice, int attackRoll, int defenseRoll,
-        CharacterStats target)
+    private IEnumerator ApplyClashDamage(
+        CharacterStats winner, CombatDice winnerDice, int winnerRoll,
+        CharacterStats loser, CombatDice loserDice, int loserRoll)
     {
-        int damage = 0;
-
-        switch (attackerDice.type)
+        switch (winnerDice.type)
         {
             case DiceType.Attack:
-                if (defenseRoll > 0) // 상대가 수비했다면
+                int grossDamage = (winner.attackPower + winnerRoll) - loser.defensePower;
+                if (loserDice.type == DiceType.Defense)
                 {
-                    damage = Mathf.Max(1, attackRoll - defenseRoll);
-                    Debug.Log($"{target.characterName}의 수비로 피해가 {defenseRoll}만큼 경감됩니다.");
+                    int finalDamage = Mathf.Max(1, grossDamage - loserRoll);
+                    Debug.Log($"{loser.characterName}의 방어력({loser.defensePower})과 수비 주사위({loserRoll})로 피해 경감! 최종 피해: {finalDamage}");
+
+                    if (damageSound != null) audioSource.PlayOneShot(damageSound);
+                    loser.TakeDamage(finalDamage);
                 }
                 else
                 {
-                    damage = attackRoll;
+                    int finalDamage = Mathf.Max(1, grossDamage);
+                    Debug.Log($"{loser.characterName}의 방어력({loser.defensePower})으로 피해 경감! 최종 피해: {finalDamage}");
+
+                    if (damageSound != null) audioSource.PlayOneShot(damageSound);
+                    loser.TakeDamage(finalDamage);
                 }
                 break;
 
             case DiceType.Defense:
-                damage = attackRoll - defenseRoll;
-                Debug.Log($"{attacker.characterName}의 수비 성공! {target.characterName}에게 {damage}의 반격 피해!");
+                int counterDamage = winnerRoll - loserRoll;
+                Debug.Log($"{winner.characterName}의 수비 성공! {loser.characterName}에게 {counterDamage}의 반격 피해를 줍니다.");
+
+                if (damageSound != null) audioSource.PlayOneShot(damageSound);
+                loser.TakeDamage(counterDamage);
                 break;
         }
 
-        if (damage > 0)
-        {
-            if (damageSound != null)
-            {
-                audioSource.PlayOneShot(damageSound);
-            }
-
-            target.TakeDamage(damage);
-            yield return new WaitForSeconds(0.3f);
-        }
+        yield return new WaitForSeconds(0.3f);
     }
 
     /// <summary>
-    /// 일방 공격 애니메이션
+    /// 일방 공격 애니메이션 - ClashManager와 동일한 로직
     /// </summary>
     private IEnumerator AnimateOneSidedAttack(
         DiceVisual diceVisual, CombatDice dice,
@@ -281,19 +285,22 @@ public class DiceAnimationManager : MonoBehaviour
     {
         int roll = dice.Roll();
 
-        Debug.Log($"{attacker.characterName}의 일방 공격! ({dice.type}): {roll}");
+        Debug.Log($"{attacker.characterName}의 남은 주사위로 일방 공격! ({dice.type}): {roll}");
 
         yield return StartCoroutine(diceVisual.AnimateRoll(roll));
         yield return new WaitForSeconds(0.3f);
 
         if (dice.type == DiceType.Attack)
         {
+            int finalDamage = Mathf.Max(1, (attacker.attackPower + roll) - target.defensePower);
+            Debug.Log($"최종 피해: {finalDamage}");
+
             if (damageSound != null)
             {
                 audioSource.PlayOneShot(damageSound);
             }
 
-            target.TakeDamage(roll);
+            target.TakeDamage(finalDamage);
             StartCoroutine(diceVisual.AnimateWin());
         }
 
