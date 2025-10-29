@@ -36580,6 +36580,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4420282917908170567, guid: b4e100ed0f0e9734b8a142f1c958f5b6, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6595953140814655372, guid: b4e100ed0f0e9734b8a142f1c958f5b6, type: 3}
       propertyPath: attackSize.x
       value: 8
