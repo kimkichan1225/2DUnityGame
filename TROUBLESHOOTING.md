@@ -95,13 +95,16 @@
 - Confirm Stage3Manager.OnDestroy() properly disables components when leaving scene
 
 ## Dice Animation Not Working
-- Verify DiceVisual prefab has proper structure (Background Image, ValueText TextMeshProUGUI)
-- Check DiceAnimationManager has references to playerDiceContainer and bossDiceContainer
-- Ensure containers have Horizontal Layout Group component
-- Confirm DiceVisual prefab is assigned in DiceAnimationManager
-- Verify BattleController has diceAnimationManager reference assigned
+**Most Common Issue**: DiceAnimationManager not assigned in BattleController
+- **FIRST CHECK**: Open Boss1 scene → Select BattleController GameObject → Inspector → Check "Dice Animation Manager" field is assigned
+- Verify DiceVisual prefab has proper structure (Background Image, ValueText TextMeshProUGUI, DiceVisual.cs component)
+- Check DiceAnimationManager has references to playerDiceContainer and bossDiceContainer transforms
+- Ensure containers have Horizontal Layout Group component (optional but recommended for layout)
+- Confirm DiceVisual prefab is assigned in DiceAnimationManager inspector
 - Check that CombatPage ScriptableObjects have CombatDice arrays populated
-- Confirm AudioSource components exist for sound effects
+- Confirm AudioSource component exists on DiceAnimationManager for sound effects
+- If animations work but damage is wrong: Verify DiceAnimationManager.ApplyClashDamage() uses same formula as ClashManager
+- If fallback mode activates: Check console for "DiceAnimationManager not assigned" warnings
 
 ## Pause Menu Not Working
 - Verify PauseMenuUI component is attached to a Canvas in the scene
