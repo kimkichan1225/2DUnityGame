@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pageName: SMASH!!
   lightCost: 4
+  artwork: {fileID: 21300000, guid: ed1c61dbefed3014ea6efacf5047c06a, type: 3}
   diceList:
   - type: 0
     minValue: 14

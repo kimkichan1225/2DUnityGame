@@ -10,6 +10,9 @@ public class CombatPage : ScriptableObject
     public string pageName;
     public int lightCost;
 
+    [Header("카드 일러스트")]
+    public Sprite artwork;
+
     [Header("주사위 목록")]
     public List<CombatDice> diceList = new List<CombatDice>();
 }

@@ -8,6 +8,7 @@ public class CardUI : MonoBehaviour
     public TextMeshProUGUI nameText;
     public TextMeshProUGUI costText;
     public TextMeshProUGUI diceDescriptionText;
+    public Image artworkImage; // 카드 일러스트
     public Image cardBackgroundImage;
     public GameObject cooldownOverlay;
     public TextMeshProUGUI cooldownText;
@@ -38,12 +39,29 @@ public class CardUI : MonoBehaviour
                 diceInfo += $"[{dice.type.ToString()} {dice.minValue}-{dice.maxValue}] ";
             }
             diceDescriptionText.text = diceInfo;
+
+            // 카드 일러스트 설정
+            if (artworkImage != null && assignedPage.artwork != null)
+            {
+                artworkImage.sprite = assignedPage.artwork;
+                artworkImage.gameObject.SetActive(true);
+            }
+            else if (artworkImage != null)
+            {
+                artworkImage.gameObject.SetActive(false);
+            }
         }
         else
         {
             nameText.text = "???";
             costText.text = "?";
             diceDescriptionText.text = "[ ??? ]";
+
+            // 비공개 카드는 일러스트 숨김
+            if (artworkImage != null)
+            {
+                artworkImage.gameObject.SetActive(false);
+            }
         }
 
         // 초기 상태 설정

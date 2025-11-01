@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pageName: FG
   lightCost: 2
+  artwork: {fileID: 21300000, guid: c910e176af29e8c4f896591e9817c7b1, type: 3}
   diceList:
   - type: 0
     minValue: 8

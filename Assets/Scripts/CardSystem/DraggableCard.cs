@@ -29,7 +29,7 @@ public class DraggableCard : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
     {
         cardData = data;
         if (data == null) return;
-        
+
         // ★★★ UI 텍스트 설정 로직 수정 ★★★
         if (nameText != null)
         {
@@ -49,6 +49,17 @@ public class DraggableCard : MonoBehaviour, IBeginDragHandler, IDragHandler, IEn
                 diceInfo += $"[{dice.type.ToString()} {dice.minValue}-{dice.maxValue}] ";
             }
             descriptionText.text = diceInfo;
+        }
+
+        // 카드 일러스트 설정
+        if (artworkImage != null && cardData.artwork != null)
+        {
+            artworkImage.sprite = cardData.artwork;
+            artworkImage.gameObject.SetActive(true);
+        }
+        else if (artworkImage != null)
+        {
+            artworkImage.gameObject.SetActive(false);
         }
     }
 
