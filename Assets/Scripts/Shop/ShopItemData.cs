@@ -13,7 +13,9 @@ public class ShopItemData : ScriptableObject
         DefenseUpgrade,      // 방어력 영구 증가
         HealthUpgrade,       // 최대 체력 영구 증가
         SpeedUpgrade,        // 이동속도 영구 증가
-        XPUpgrade            // 경험치 증가
+        XPUpgrade,           // 경험치 증가
+        AttackCard,          // 랜덤 공격 카드
+        DefenseCard          // 랜덤 방어 카드
     }
 
     [Header("기본 정보")]
@@ -29,6 +31,10 @@ public class ShopItemData : ScriptableObject
 
     [Header("포션 전용 (ItemType이 Potion일 때만 사용)")]
     public PotionItemData potionData;  // 실제 사용할 포션 데이터
+
+    [Header("카드 전용 (ItemType이 AttackCard/DefenseCard일 때만 사용)")]
+    public Sprite[] normalCardArtworks;  // [0]: Attack, [1]: Defense
+    public Sprite[] highCostCardArtworks;  // [0]: Attack 4코스트, [1]: Defense 4코스트
 
     [Header("아이콘 크기 설정")]
     [Tooltip("아이콘 크기 배율 (1.0 = 기본 크기)")]
@@ -94,6 +100,32 @@ public class ShopItemData : ScriptableObject
                 {
                     stats.AddXp(effectValue);
                     Debug.Log($"경험치 {effectValue}를 획득했습니다! (현재: {stats.currentXp}/{stats.xpToNextLevel})");
+                }
+                break;
+
+            case ItemType.AttackCard:
+                // 랜덤 공격 카드 생성 및 추가
+                CharacterStats characterStats = player.GetComponent<CharacterStats>();
+                if (characterStats != null)
+                {
+                    CombatPage attackCard = CardGenerator.GenerateAttackCard();
+                    Sprite artwork = CardGenerator.GetArtworkForCard(DiceType.Attack, attackCard.lightCost, normalCardArtworks, highCostCardArtworks);
+                    attackCard.artwork = artwork;
+                    characterStats.AddCardToCollection(attackCard);
+                    Debug.Log($"[상점] 공격 카드 획득: {attackCard.pageName} (코스트: {attackCard.lightCost}, 주사위: {attackCard.diceList.Count}개)");
+                }
+                break;
+
+            case ItemType.DefenseCard:
+                // 랜덤 방어 카드 생성 및 추가
+                CharacterStats charStats = player.GetComponent<CharacterStats>();
+                if (charStats != null)
+                {
+                    CombatPage defenseCard = CardGenerator.GenerateDefenseCard();
+                    Sprite artwork = CardGenerator.GetArtworkForCard(DiceType.Defense, defenseCard.lightCost, normalCardArtworks, highCostCardArtworks);
+                    defenseCard.artwork = artwork;
+                    charStats.AddCardToCollection(defenseCard);
+                    Debug.Log($"[상점] 방어 카드 획득: {defenseCard.pageName} (코스트: {defenseCard.lightCost}, 주사위: {defenseCard.diceList.Count}개)");
                 }
                 break;
         }

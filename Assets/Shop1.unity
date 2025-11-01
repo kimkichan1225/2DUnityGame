@@ -5500,6 +5500,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 05e792dcf3731c2498f190790d7f72f1, type: 2}
   - {fileID: 11400000, guid: 1e17515b7e44b3d439b7f32859b56b48, type: 2}
   - {fileID: 11400000, guid: f151c09de9d8c9e45847b9cc52d6e41c, type: 2}
+  - {fileID: 11400000, guid: 3a757dee4907c56419a740bf22ec0eea, type: 2}
+  - {fileID: 11400000, guid: 01dd1fecbe35dcd4686a184823e2c1d1, type: 2}
   itemPedestals:
   - {fileID: 827007566}
   - {fileID: 73639181}
