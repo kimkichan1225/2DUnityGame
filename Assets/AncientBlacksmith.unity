@@ -1306,7 +1306,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   flameTrapPrefab: {fileID: 3036642140771930959}
-  maxTrapCount: 4
+  maxTrapCount: 5
   minSpawnInterval: 1
   maxSpawnInterval: 3
   spawnMin: {fileID: 907371527}
@@ -2584,8 +2584,8 @@ MonoBehaviour:
   warningSign: {fileID: 5786239532541151591}
   explosionEffect: {fileID: 524294627043653222}
   damageCollider: {fileID: 0}
-  warningDuration: 0.5
-  activeDuration: 1
+  warningDuration: 0.8
+  activeDuration: 0.5
   cooldownDuration: 3
   penaltyAmount: 2
 --- !u!1660057539 &9223372036854775807
