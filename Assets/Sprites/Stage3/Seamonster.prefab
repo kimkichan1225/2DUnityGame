@@ -301,13 +301,13 @@ MonoBehaviour:
     m_Bits: 320
   attackDamage: 10
   attackCooldown: 1.5
-  attackSound: {fileID: 0}
+  attackSound: {fileID: 8300000, guid: afc143fbc5ad2024c8171ad4f845c126, type: 3}
   attackHitbox: {fileID: 7728666135147614056}
   wallCheck: {fileID: 4028920356069779993}
   ledgeCheck: {fileID: 2645180145938145634}
   wallCheckDistance: 0.1
   ledgeCheckDistance: 0.2
-  walkSound: {fileID: 0}
+  walkSound: {fileID: 8300000, guid: 2352822feb4caa14ebdbc0c713289f8d, type: 3}
 --- !u!114 &4359051043128122740
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -335,8 +335,8 @@ MonoBehaviour:
   randomRangeY: {x: -0.5, y: 0.5}
   hurtAnimationProbability: 0.3
   flashDuration: 0.1
-  deathSound: {fileID: 0}
-  hitSound: {fileID: 0}
+  deathSound: {fileID: 8300000, guid: c9714660cfc35d6478be74715399759c, type: 3}
+  hitSound: {fileID: 8300000, guid: 84ddfa36f41743b499bcdce5b2de8c59, type: 3}
   deathAnimationDuration: 0.8
 --- !u!114 &-911999697013926925
 MonoBehaviour:

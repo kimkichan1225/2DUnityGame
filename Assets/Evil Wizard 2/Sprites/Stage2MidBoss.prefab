@@ -915,7 +915,7 @@ AudioSource:
   m_GameObject: {fileID: 8373605985818910074}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -7801067643028038101, guid: b907478f16be77c47b6acd8ff953e824, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
@@ -1044,8 +1044,8 @@ MonoBehaviour:
   ledgeCheck: {fileID: 184478062837809141}
   wallCheckDistance: 0.1
   ledgeCheckDistance: 0.2
-  attackSound: {fileID: 0}
-  teleportSound: {fileID: 0}
-  walkSound: {fileID: 0}
+  attackSound: {fileID: 8300000, guid: aea30de4080e122439372dadaeb280f0, type: 3}
+  teleportSound: {fileID: 8300000, guid: 862a952a4e1f3384f8a32520ebc7f55f, type: 3}
+  walkSound: {fileID: 8300000, guid: 3d4e431bd47c4844f82b156506b3dd78, type: 3}
   useSpriteChild: 0
   spriteTransform: {fileID: 8497535409140994676}

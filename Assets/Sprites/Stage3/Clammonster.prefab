@@ -259,7 +259,7 @@ MonoBehaviour:
     m_Bits: 320
   attackDamage: 20
   attackCooldown: 3
-  attackSound: {fileID: 0}
+  attackSound: {fileID: 8300000, guid: 8fe54bcf712eb1b4695e81319059269b, type: 3}
   attackHitbox: {fileID: 5659978944721908361}
   wallCheck: {fileID: 3079696495051086761}
   ledgeCheck: {fileID: 791918042145360943}
@@ -293,8 +293,8 @@ MonoBehaviour:
   randomRangeY: {x: -0.5, y: 0.5}
   hurtAnimationProbability: 0.3
   flashDuration: 0.1
-  deathSound: {fileID: 0}
-  hitSound: {fileID: 0}
+  deathSound: {fileID: 8300000, guid: c9714660cfc35d6478be74715399759c, type: 3}
+  hitSound: {fileID: 8300000, guid: 84ddfa36f41743b499bcdce5b2de8c59, type: 3}
   deathAnimationDuration: 1
 --- !u!61 &7188450613110199722
 BoxCollider2D:
@@ -389,7 +389,7 @@ MonoBehaviour:
   attackDamage: 15
   attackCooldown: 2
   attackSound: {fileID: 0}
-  attackHitbox: {fileID: 0}
+  attackHitbox: {fileID: 5659978944721908361}
   pearlPrefab: {fileID: 8899083730283333015, guid: 01c9409cdaacd1145a828858d5a752b1, type: 3}
 --- !u!114 &-1554767622928106488
 MonoBehaviour:

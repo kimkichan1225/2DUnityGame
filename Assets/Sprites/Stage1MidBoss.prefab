@@ -690,9 +690,9 @@ MonoBehaviour:
   ledgeCheck: {fileID: 2762525137281403152}
   wallCheckDistance: 0.1
   ledgeCheckDistance: 0.2
-  attackSound: {fileID: 0}
-  castSound: {fileID: 0}
-  walkSound: {fileID: 0}
+  attackSound: {fileID: 8300000, guid: 0d2a2167cdb2f1f41855b1c9a8e55191, type: 3}
+  castSound: {fileID: 8300000, guid: b68964bc13744144d86b1973b0e2a4bc, type: 3}
+  walkSound: {fileID: 8300000, guid: 53c77503b3c824243bd743fa22e116da, type: 3}
   useSpriteChild: 1
   spriteTransform: {fileID: 2018665457911104471}
 --- !u!114 &1508420843836469830
@@ -720,7 +720,7 @@ MonoBehaviour:
   hitEffectDuration: 0.5
   randomRangeX: {x: -0.5, y: 0.5}
   randomRangeY: {x: -0.5, y: 0.5}
-  hurtAnimationThreshold: 0.5
+  hurtAnimationProbability: 0.3
   flashDuration: 0.1
   deathSound: {fileID: 8300000, guid: c9714660cfc35d6478be74715399759c, type: 3}
   hitSound: {fileID: 8300000, guid: 84ddfa36f41743b499bcdce5b2de8c59, type: 3}
@@ -742,6 +742,7 @@ MonoBehaviour:
   goldDropRange: 0.2
   minCoinCount: 10
   maxCoinCount: 15
+  itemDropList: []
   dropForce: 3
 --- !u!114 &4048921204263175648
 MonoBehaviour:
@@ -762,6 +763,8 @@ MonoBehaviour:
 
     Let''s hurry
     up and go'
+  wallToDisable: {fileID: 0}
+  arrowsToEnable: {fileID: 0}
 --- !u!82 &6020809341604278722
 AudioSource:
   m_ObjectHideFlags: 0
@@ -771,7 +774,7 @@ AudioSource:
   m_GameObject: {fileID: 7854755250071795644}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 0}
+  OutputAudioMixerGroup: {fileID: -7801067643028038101, guid: b907478f16be77c47b6acd8ff953e824, type: 2}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0

@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections; // ★ 코루틴 사용을 위해 추가
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerSwimming : MonoBehaviour
@@ -8,6 +9,17 @@ public class PlayerSwimming : MonoBehaviour
     public float ascendForce = 5.5f;
     public float waterDrag = 1.5f;
     public float gravityScaleInWater = 1f;
+
+    // --- ▼▼▼▼▼ 1. (★추가됨★) 공격/피격 시 속도 설정 ▼▼▼▼▼ ---
+    [Header("공격/피격 시 속도")]
+    [Tooltip("공격 모션 중에 적용될 이동 속도")]
+    public float attackMoveSpeed = 0.5f; // 공격 중 속도 (매우 느리게)
+    [Tooltip("적과 닿았을 때 속도 감소 비율 (예: 0.5 = 50% 감소)")]
+    public float speedReductionFactor = 0.5f;
+    [Tooltip("적과 닿은 후 속도가 느려져 있는 시간")]
+    public float speedReductionDuration = 0.5f;
+    private bool isSlowed = false; // 현재 감속 상태인지
+    // --- ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ ---
 
     [Header("벽 감지 설정")]
     public Transform wallCheck;
@@ -59,6 +71,7 @@ public class PlayerSwimming : MonoBehaviour
         originalMaterial = rb.sharedMaterial;
         rb.sharedMaterial = noFrictionMaterial;
         currentAscendCount = 0; // 활성화 시 카운트 초기화
+        isSlowed = false; // 감속 상태 초기화
     }
 
     void OnDisable()
@@ -70,6 +83,13 @@ public class PlayerSwimming : MonoBehaviour
 
     void Update()
     {
+        // PlayerController가 비활성화(canMove=false) 상태면 입력 무시
+        if (playerController != null && !playerController.canMove)
+        {
+            moveInput = 0;
+            return;
+        }
+
         moveInput = Input.GetAxisRaw("Horizontal");
 
         // 'K'키를 누르고, 아직 최대 상승 횟수에 도달하지 않았을 때
@@ -83,6 +103,12 @@ public class PlayerSwimming : MonoBehaviour
 
     void FixedUpdate()
     {
+        if (playerController != null && !playerController.canMove)
+        {
+            rb.linearVelocity = new Vector2(0, rb.linearVelocity.y);
+            return;
+        }
+
         if (playerController != null && playerController.IsDashing())
         {
             return;
@@ -99,7 +125,25 @@ public class PlayerSwimming : MonoBehaviour
             isTouchingWall = Physics2D.OverlapCircle(wallCheck.position, wallCheckRadius, wallLayer);
         }
 
-        float currentMoveSpeed = swimSpeed;
+        // --- ▼▼▼▼▼ 2. (★수정됨★) 공격 중/감속 중 속도 계산 ▼▼▼▼▼ ---
+        float currentMoveSpeed;
+
+        if (playerController != null && playerController.isAttacking)
+        {
+            // "공격할때는 방향키를 눌러도 매우느리게 이동"
+            currentMoveSpeed = attackMoveSpeed;
+        }
+        else if (isSlowed)
+        {
+            // "몬스터와 닿아있을때는 이동속도 느리게"
+            currentMoveSpeed = swimSpeed * speedReductionFactor;
+        }
+        else
+        {
+            // 평상시 수영 속도
+            currentMoveSpeed = swimSpeed;
+        }
+        // --- ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ ---
 
         if (isTouchingWall && ((moveInput > 0 && transform.localScale.x > 0) || (moveInput < 0 && transform.localScale.x < 0)))
         {
@@ -116,6 +160,25 @@ public class PlayerSwimming : MonoBehaviour
         }
         // --- ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ ---
     }
+
+    // --- ▼▼▼▼▼ 3. (★추가됨★) 적 감지 로직 ▼▼▼▼▼ ---
+    // (PlayerController의 OnTriggerEnter2D와 동일한 기능)
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        // 몬스터와 닿았고, 현재 감속 상태가 아니라면 감속 코루틴 시작
+        if (other.CompareTag("Enemy") && !isSlowed)
+        {
+            StartCoroutine(HandleEnemyCollision());
+        }
+    }
+
+    private IEnumerator HandleEnemyCollision()
+    {
+        isSlowed = true; // 감속 시작
+        yield return new WaitForSeconds(speedReductionDuration); // 정해진 시간만큼 대기
+        isSlowed = false; // 감속 해제
+    }
+    // --- ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲ ---
 
     // --- ▼▼▼▼▼ 추가된 부분 (땅 감지 범위 시각화) ▼▼▼▼▼ ---
     // Scene 뷰에서 땅 감지 범위를 원으로 표시 (디버깅용)
