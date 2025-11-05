@@ -160,7 +160,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0.000022003469, y: 0.048033684}
+  m_AnchoredPosition: {x: 0.000012746224, y: 0.04808503}
   m_SizeDelta: {x: -11.8533, y: 1032}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &5723049
@@ -35482,6 +35482,9 @@ MonoBehaviour:
   ascendForce: 5.5
   waterDrag: 1.5
   gravityScaleInWater: 1
+  attackMoveSpeed: 0.5
+  speedReductionFactor: 0.5
+  speedReductionDuration: 0.5
   wallCheck: {fileID: 0}
   wallCheckRadius: 0.1
   wallLayer:
