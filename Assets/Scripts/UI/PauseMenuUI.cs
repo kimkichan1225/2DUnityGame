@@ -20,6 +20,7 @@ public class PauseMenuUI : MonoBehaviour
     [SerializeField] private Button closeButton;
     [SerializeField] private Button settingButton;
     [SerializeField] private Button goMainButton;
+    [SerializeField] private Button quitButton;  // 게임 종료 버튼
 
     private bool isPaused = false;
 
@@ -35,10 +36,11 @@ public class PauseMenuUI : MonoBehaviour
 
         // --- 3. 버튼 이벤트 '자동' 연결 ---
 
-        // 3-1. 메인 서랍 버튼 (Setting, GoMain, Close)
+        // 3-1. 메인 서랍 버튼 (Setting, GoMain, Close, Quit)
         if (closeButton != null) closeButton.onClick.AddListener(ResumeGame);
         if (settingButton != null) settingButton.onClick.AddListener(OpenSettingsMenu);
         if (goMainButton != null) goMainButton.onClick.AddListener(OnGoMainButton);
+        if (quitButton != null) quitButton.onClick.AddListener(QuitGame);  // 게임 종료
 
         // 3-2. '설정' 서랍 버튼 (Audio, Back)
         if (settingsPanel != null)
@@ -78,9 +80,22 @@ public class PauseMenuUI : MonoBehaviour
 
     void Update()
     {
+        // ESC 키로 일시정지 토글
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             TogglePause();
+        }
+
+        // Alt+F4로 게임 종료 (Windows 표준)
+        if ((Input.GetKey(KeyCode.LeftAlt) || Input.GetKey(KeyCode.RightAlt)) && Input.GetKeyDown(KeyCode.F4))
+        {
+            QuitGame();
+        }
+
+        // 또는 Ctrl+Q로 게임 종료 (대안)
+        if ((Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)) && Input.GetKeyDown(KeyCode.Q))
+        {
+            QuitGame();
         }
     }
 
@@ -165,6 +180,20 @@ public class PauseMenuUI : MonoBehaviour
 
         SceneManager.LoadScene("Main");
         yield return null;
+    }
+
+    // 6. 게임 종료 기능
+    private void QuitGame()
+    {
+        Debug.Log("게임 종료!");
+
+        #if UNITY_EDITOR
+            // Unity 에디터에서는 플레이 모드 종료
+            UnityEditor.EditorApplication.isPlaying = false;
+        #else
+            // 빌드된 게임에서는 애플리케이션 종료
+            Application.Quit();
+        #endif
     }
 }
 
