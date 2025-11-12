@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: Boss3Card 8
   m_EditorClassIdentifier: 
   pageName: Despiar
-  lightCost: 0
+  lightCost: 4
+  artwork: {fileID: 21300000, guid: 3791d78c9bf26c34fb3fa88e9c523792, type: 3}
   diceList:
   - type: 1
     minValue: 10
